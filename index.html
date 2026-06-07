@@ -226,7 +226,7 @@
             bottom: 0;
             width: 1px;
             background: #d4af6d;
-            opacity: 0.4;
+            opacity: 0.45;
             left: 20px;
             z-index: 0;
         }
@@ -245,10 +245,10 @@
     <audio id="music" loop><source src="https://cdn.chungdoi.com/music/beautiful-in-white.mp3" type="audio/mpeg"></audio>
     <canvas id="confetti-canvas"></canvas>
 
-    <!-- ĐƯA CONTAINER CÁNH HOA LÊN TRÊN ĐẦU BODY ĐỂ TRÁNH LỖI PHÂN LỚP HIỂN THỊ (TRANSFORM BUG) -->
+    <!-- CONTAINER CÁNH HOA LÊN TRÊN ĐẦU BODY ĐỂ TRÁNH LỖI PHÂN LỚP HIỂN THỊ (TRANSFORM BUG) -->
     <div id="flowers"></div>
 
-    <!-- ĐỊNH NGHĨA VECTOR HOA VĂG GÓC CỔ ĐIỂN (SVG SYMBOL) -->
+    <!-- ĐỊNH NGHĨA VECTOR HOA VĂN GÓC CỔ ĐIỂN (SVG SYMBOL) -->
     <svg class="hidden" xmlns="http://www.w3.org/2000/svg">
         <symbol id="floral-corner" viewBox="0 0 100 100">
             <path d="M4,4 L28,4 C22,12 12,22 4,28 Z" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
@@ -303,7 +303,7 @@
             </div>
         </section>
 
-        <!-- 3. GIỚI THIỆU CẶP ĐÔI -->
+        <!-- 3. GIỚI THIỆU CẶP ĐÔI (ĐÃ ĐẢO CHÚ RỂ DUY HIỆP LÊN TRƯỚC) -->
         <section class="py-16 md:py-24 px-6 bg-white border-b border-gray-100">
             <div class="max-w-3xl mx-auto space-y-16">
                 <!-- Chú rể Duy Hiệp -->
@@ -817,40 +817,38 @@
             // Cuộn mượt về đầu trang ngay lập tức trước khi gỡ khóa body để bảo toàn khung tọa độ
             window.scrollTo({ top: 0 });
 
-            // Đợi 1000ms cho Splash Screen biến mất hoàn toàn rồi mới mở khóa cuộn & khởi tạo AOS
-            setTimeout(() => {
-                document.body.classList.remove("lock-scroll");
-                
-                // Khởi tạo AOS tại đúng thời điểm vàng để tính toán tọa độ cuộn chuẩn 100%
-                AOS.init({ duration: 1100, once: true });
-                AOS.refresh();
+            // Gỡ bỏ khóa cuộn body ngay lập tức để AOS và Swiper định vị toạ độ chính xác 100%
+            document.body.classList.remove("lock-scroll");
 
-                // Khởi tạo Swiper Album 3D
-                new Swiper(".mySwiper", {
-                    effect: "coverflow",
-                    grabCursor: true,
-                    centeredSlides: true,
-                    slidesPerView: "auto",
-                    coverflowEffect: { rotate: 35, stretch: 0, depth: 100, modifier: 1, slideShadows: true },
-                    pagination: { el: ".swiper-pagination", clickable: true },
-                    navigation: { nextEl: ".swiper-button-next", prevEl: ".swiper-button-prev" },
-                    breakpoints: {
-                        320: { slidesPerView: 1.15, spaceBetween: 15 },
-                        768: { slidesPerView: 1.8, spaceBetween: 30 }
-                    }
-                });
+            // Khởi tạo AOS ngay lập tức để các phần tử phía sau hoạt ảnh chuyển động đồng bộ, tránh nhấp nháy màn hình
+            AOS.init({ duration: 1100, once: true });
+            AOS.refresh();
 
-                // Kích hoạt các nút tương tác nổi
-                setupStickyRSVP();
-                
-                // Nạp dữ liệu lời chúc thực tế từ Google Sheets ngay sau khi mở màn
-                fetchWishes();
-            }, 1000);
+            // Khởi tạo Swiper Album 3D
+            new Swiper(".mySwiper", {
+                effect: "coverflow",
+                grabCursor: true,
+                centeredSlides: true,
+                slidesPerView: "auto",
+                coverflowEffect: { rotate: 35, stretch: 0, depth: 100, modifier: 1, slideShadows: true },
+                pagination: { el: ".swiper-pagination", clickable: true },
+                navigation: { nextEl: ".swiper-button-next", prevEl: ".swiper-button-prev" },
+                breakpoints: {
+                    320: { slidesPerView: 1.15, spaceBetween: 15 },
+                    768: { slidesPerView: 1.8, spaceBetween: 30 }
+                }
+            });
 
-            // Xóa triệt để khỏi luồng hiển thị của DOM để tối ưu hóa bộ nhớ RAM thiết bị
+            // Kích hoạt các nút tương tác nổi
+            setupStickyRSVP();
+            
+            // Nạp dữ liệu lời chúc thực tế từ Google Sheets ngay lập tức
+            fetchWishes();
+
+            // Xóa triệt để khỏi luồng hiển thị của DOM sau khi hoàn thành transition
             setTimeout(() => { 
                 splash.style.display = "none"; 
-            }, 1500);
+            }, 1000);
         }
 
         // Bật/Tắt modal quà cưới
@@ -885,7 +883,7 @@
         // SỬA LỖI 2: Đồng bộ hóa 2 chiều Lưu Bút thời gian thực với Google Docs/Sheets
         function fetchWishes() {
             const loader = document.getElementById("gb-loading");
-            loader.classList.remove("hidden");
+            if (loader) loader.classList.remove("hidden");
 
             fetch(apiEndpoint)
                 .then(res => {
@@ -912,7 +910,7 @@
 
                     // Chuẩn hóa cấu trúc và sắp xếp theo mốc thời gian thực mới nhất lên đầu
                     localWishes = wishes
-                        .filter(w => w.name && w.message)
+                        .filter(w => (w.name || w.Name) && (w.message || w.Message))
                         .map(w => ({
                             name: w.name || w.Name || "Khách mời",
                             message: w.message || w.Message || "",
@@ -934,7 +932,7 @@
                     renderWishes();
                 })
                 .finally(() => {
-                    loader.classList.add("hidden");
+                    if (loader) loader.classList.add("hidden");
                 });
         }
 
@@ -964,6 +962,7 @@
         // Kết xuất danh sách lời chúc lên giao diện có phân trang
         function renderWishes() {
             const content = document.getElementById("gb-content");
+            if (!content) return;
             content.innerHTML = "";
 
             if (localWishes.length === 0) {
@@ -1006,16 +1005,21 @@
         // Quản lý nút phân trang
         function updatePaginationControls() {
             const totalPages = Math.max(1, Math.ceil(localWishes.length / itemsPerPage));
-            document.getElementById("page-indicator").innerText = `Trang ${currentPage} / ${totalPages}`;
-            document.getElementById("btn-prev").disabled = currentPage === 1;
-            document.getElementById("btn-next").disabled = currentPage === totalPages;
+            const pageIndicator = document.getElementById("page-indicator");
+            const btnPrev = document.getElementById("btn-prev");
+            const btnNext = document.getElementById("btn-next");
+            
+            if (pageIndicator) pageIndicator.innerText = `Trang ${currentPage} / ${totalPages}`;
+            if (btnPrev) btnPrev.disabled = currentPage === 1;
+            if (btnNext) btnNext.disabled = currentPage === totalPages;
         }
 
         // Chuyển trang mượt mà
         function changePage(direction) {
             currentPage += direction;
             renderWishes();
-            document.getElementById("guestbook-list").scrollIntoView({ behavior: 'smooth' });
+            const listEl = document.getElementById("guestbook-list");
+            if (listEl) listEl.scrollIntoView({ behavior: 'smooth' });
         }
 
         // Trí tuệ nhân tạo viết thiệp tự động (Gemini Flash-Preview)
@@ -1024,18 +1028,20 @@
             const styleSelect = document.getElementById("ai-style");
             const messageArea = document.getElementById("gb-message") || document.getElementById("guest-message");
 
-            const guestName = nameInput.value.trim();
+            const guestName = nameInput ? nameInput.value.trim() : "";
             if (!guestName) {
                 alert("Vui lòng điền tên của bạn trước để Trợ lý AI có thể cá nhân hóa lời chúc!");
-                nameInput.focus();
+                if (nameInput) nameInput.focus();
                 return;
             }
 
-            const style = styleSelect.value;
+            const style = styleSelect ? styleSelect.value : "chân thành và cảm động";
             const btnAI = document.getElementById("btn-ai-wish");
-            const originalText = btnAI.innerHTML;
-            btnAI.disabled = true;
-            btnAI.innerHTML = `<span class="spinner w-4 h-4 border-2"></span> &nbsp;Đang nghĩ...`;
+            const originalText = btnAI ? btnAI.innerHTML : "✨ Nhờ AI viết";
+            if (btnAI) {
+                btnAI.disabled = true;
+                btnAI.innerHTML = `<span class="spinner w-4 h-4 border-2"></span> &nbsp;Đang nghĩ...`;
+            }
 
             const prompt = `Hãy viết một lời chúc đám cưới ngắn gọn (từ 1 đến 3 câu), phong cách "${style}" gửi đến chú rể tên Duy Hiệp và cô dâu tên Minh Nguyệt. Lời chúc được ký danh bởi người gửi là "${guestName}". Trả về kết quả trực tiếp bằng tiếng Việt tự nhiên nhất, không thừa chữ, không định dạng markdown.`;
 
@@ -1047,7 +1053,7 @@
             .then(res => res.json())
             .then(data => {
                 const wishText = data.candidates?.[0]?.content?.parts?.[0]?.text;
-                if (wishText) {
+                if (wishText && messageArea) {
                     messageArea.value = wishText.trim();
                 } else {
                     throw new Error("Không thể trích xuất văn bản");
@@ -1060,18 +1066,26 @@
                     "ngôn tình, lãng mạn": `Chúc cho duyên phận đưa Duy Hiệp và Minh Nguyệt gặp gỡ sẽ hóa thành tình yêu thiên trường địa cửu, bên nhau trọn đời trọn kiếp.`,
                     "thơ lục bát (2 đến 4 câu)": `Chúc cho Nguyệt sánh đôi Hiệp,\nTơ hồng dệt lối duyên lành bền lâu.`
                 };
-                messageArea.value = fallbacks[style] || `Chúc Duy Hiệp và Minh Nguyệt trăm năm hạnh phúc viên mãn!`;
+                if (messageArea) {
+                    messageArea.value = fallbacks[style] || `Chúc Duy Hiệp và Minh Nguyệt trăm năm hạnh phúc viên mãn!`;
+                }
             })
             .finally(() => {
-                btnAI.disabled = false;
-                btnAI.innerHTML = originalText;
+                if (btnAI) {
+                    btnAI.disabled = false;
+                    btnAI.innerHTML = originalText;
+                }
             });
         }
 
         // Phóng to xem ảnh (Lightbox)
         function showFull(src) {
-            document.getElementById('lightbox-img').src = src;
-            document.getElementById('lightbox').style.display = 'flex';
+            const lightboxImg = document.getElementById('lightbox-img');
+            const lightbox = document.getElementById('lightbox');
+            if (lightboxImg && lightbox) {
+                lightboxImg.src = src;
+                lightbox.style.display = 'flex';
+            }
         }
 
         // Bộ đếm đếm ngược ngày cưới
@@ -1083,53 +1097,63 @@
             const hours = Math.floor((d % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const minutes = Math.floor((d % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((d % (1000 * 60)) / 1000);
-            document.getElementById("countdown").innerHTML = 
-                `<div class="count-box p-4 min-w-[70px] border border-wedding-gold/10 text-wedding-primary">
-                    <span class="block text-2xl font-bold tracking-normal">${days}</span>
-                    <span class="block text-[10px] uppercase tracking-widest mt-1 text-gray-500 font-semibold">Ngày</span>
-                 </div>
-                 <div class="count-box p-4 min-w-[70px] border border-wedding-gold/10 text-wedding-primary">
-                    <span class="block text-2xl font-bold tracking-normal">${hours}</span>
-                    <span class="block text-[10px] uppercase tracking-widest mt-1 text-gray-500 font-semibold">Giờ</span>
-                 </div>
-                 <div class="count-box p-4 min-w-[70px] border border-wedding-gold/10 text-wedding-primary">
-                    <span class="block text-2xl font-bold tracking-normal">${minutes}</span>
-                    <span class="block text-[10px] uppercase tracking-widest mt-1 text-gray-500 font-semibold">Phút</span>
-                 </div>
-                 <div class="count-box p-4 min-w-[70px] border border-wedding-gold/10 text-wedding-primary">
-                    <span class="block text-2xl font-bold tracking-normal">${seconds}</span>
-                    <span class="block text-[10px] uppercase tracking-widest mt-1 text-gray-500 font-semibold">Giây</span>
-                 </div>`;
+            
+            const countdownEl = document.getElementById("countdown");
+            if (countdownEl) {
+                countdownEl.innerHTML = 
+                    `<div class="count-box p-4 min-w-[70px] border border-wedding-gold/10 text-wedding-primary">
+                        <span class="block text-2xl font-bold tracking-normal">${days}</span>
+                        <span class="block text-[10px] uppercase tracking-widest mt-1 text-gray-500 font-semibold">Ngày</span>
+                     </div>
+                     <div class="count-box p-4 min-w-[70px] border border-wedding-gold/10 text-wedding-primary">
+                        <span class="block text-2xl font-bold tracking-normal">${hours}</span>
+                        <span class="block text-[10px] uppercase tracking-widest mt-1 text-gray-500 font-semibold">Giờ</span>
+                     </div>
+                     <div class="count-box p-4 min-w-[70px] border border-wedding-gold/10 text-wedding-primary">
+                        <span class="block text-2xl font-bold tracking-normal">${minutes}</span>
+                        <span class="block text-[10px] uppercase tracking-widest mt-1 text-gray-500 font-semibold">Phút</span>
+                     </div>
+                     <div class="count-box p-4 min-w-[70px] border border-wedding-gold/10 text-wedding-primary">
+                        <span class="block text-2xl font-bold tracking-normal">${seconds}</span>
+                        <span class="block text-[10px] uppercase tracking-widest mt-1 text-gray-500 font-semibold">Giây</span>
+                     </div>`;
+            }
         }, 1000);
 
         // Hiệu ứng cánh hồng (Rose Petals) rơi dập dìu lãng mạn
         const container = document.getElementById("flowers");
-        for (let i = 0; i < 28; i++) {
-            let flower = document.createElement("div");
-            flower.className = "petal";
-            const size = Math.random() * 12 + 10;
-            flower.style.width = `${size}px`;
-            flower.style.height = `${size + 5}px`;
-            flower.style.background = "linear-gradient(135deg, rgba(255, 182, 193, 0.9) 0%, rgba(255, 105, 180, 0.3) 100%)";
-            flower.style.left = Math.random() * 100 + "vw";
-            flower.style.animationDuration = (Math.random() * 6 + 6) + "s";
-            flower.style.animationDelay = Math.random() * 6 + "s";
-            container.appendChild(flower);
+        if (container) {
+            for (let i = 0; i < 28; i++) {
+                let flower = document.createElement("div");
+                flower.className = "petal";
+                const size = Math.random() * 12 + 10;
+                flower.style.width = `${size}px`;
+                flower.style.height = `${size + 5}px`;
+                // Chuyển sang gradient hồng đào / cánh hoa hồng tươi tắn mềm mại
+                flower.style.background = "linear-gradient(135deg, rgba(255, 182, 193, 0.9) 0%, rgba(255, 105, 180, 0.3) 100%)";
+                flower.style.left = Math.random() * 100 + "vw";
+                flower.style.animationDuration = (Math.random() * 6 + 6) + "s"; // <--- ĐÃ KHẮC PHỤC LỖI CÚ PHÁP TẠI ĐÂY (thêm dấu cộng ghép chuỗi "s")
+                flower.style.animationDelay = Math.random() * 6 + "s";
+                container.appendChild(flower);
+            }
         }
 
         // BẮN PHÁO HOA GIẤY (CANVAS CONFETTI)
         const canvas = document.getElementById("confetti-canvas");
-        const ctx = canvas.getContext("2d");
+        const ctx = canvas ? canvas.getContext("2d") : null;
         let confetti = [];
 
         function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+            if (canvas) {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
         }
         window.addEventListener("resize", resizeCanvas);
         resizeCanvas();
 
         function triggerConfetti() {
+            if (!canvas) return;
             confetti = [];
             const colors = ["#1f3a2b", "#d4af6d", "#b39359", "#e6d5b8", "#ffffff"];
             for (let i = 0; i < 150; i++) {
@@ -1149,6 +1173,7 @@
         }
 
         function animateConfetti() {
+            if (!ctx || !canvas) return;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             let active = false;
 
@@ -1179,68 +1204,81 @@
         }
 
         // XỬ LÝ GỬI FORM RSVP & LƯU BÚT ĐỒNG BỘ 2 CHIỀU
-        document.getElementById('rsvp-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const btn = document.getElementById('rsvp-btn');
-            const status = document.getElementById('rsvp-status');
-            const origText = btn.innerText;
+        const rsvpForm = document.getElementById('rsvp-form');
+        if (rsvpForm) {
+            rsvpForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const btn = document.getElementById('rsvp-btn');
+                const status = document.getElementById('rsvp-status');
+                const origText = btn ? btn.innerText : "GỬI XÁC NHẬN";
 
-            btn.innerText = "ĐANG GỬI...";
-            btn.disabled = true;
+                if (btn) {
+                    btn.innerText = "ĐANG GỬI...";
+                    btn.disabled = true;
+                }
 
-            const name = document.getElementById('guest-name').value;
-            const message = document.getElementById('guest-message').value;
+                const nameVal = document.getElementById('guest-name') ? document.getElementById('guest-name').value : "";
+                const messageVal = document.getElementById('guest-message') ? document.getElementById('guest-message').value : "";
+                const attendanceVal = document.getElementById('attendance') ? document.getElementById('attendance').value : "";
+                const locationVal = document.getElementById('location') ? document.getElementById('location').value : "";
+                const guestCountVal = document.getElementById('guest-count') ? document.getElementById('guest-count').value : "1";
 
-            const payload = {
-                name: name,
-                attendance: document.getElementById('attendance').value,
-                location: document.getElementById('location').value,
-                guestCount: document.getElementById('guest-count').value,
-                message: message
-            };
+                const payload = {
+                    name: nameVal,
+                    attendance: attendanceVal,
+                    location: locationVal,
+                    guestCount: guestCountVal,
+                    message: messageVal
+                };
 
-            // CƠ CHẾ OPTIMISTIC UI: Hiển thị lời chúc lập tức trên giao diện
-            const newWish = {
-                name: name,
-                message: message,
-                timestamp: new Date().toISOString()
-            };
-            localWishes.unshift(newWish);
-            currentPage = 1; // Quay về trang đầu tiên
-            renderWishes(); // Cập nhật danh sách lời chúc ngay tức khắc
+                // CƠ CHẾ OPTIMISTIC UI: Hiển thị lời chúc lập tức trên giao diện
+                const newWish = {
+                    name: nameVal,
+                    message: messageVal,
+                    timestamp: new Date().toISOString()
+                };
+                localWishes.unshift(newWish);
+                currentPage = 1; // Quay về trang đầu tiên
+                renderWishes(); // Cập nhật danh sách lời chúc ngay tức khắc
 
-            // Gửi bất đồng bộ ngầm đến Google Sheets
-            fetch(apiEndpoint, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            })
-            .then(() => {
-                status.classList.remove('hidden');
-                btn.innerText = "THÀNH CÔNG";
-                
-                // Hiệu ứng pháo hoa giấy tưng bừng ăn mừng
-                triggerConfetti();
+                // Gửi bất đồng bộ ngầm đến Google Sheets
+                fetch(apiEndpoint, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                })
+                .then(() => {
+                    if (status) status.classList.remove('hidden');
+                    if (btn) btn.innerText = "THÀNH CÔNG";
+                    
+                    // Hiệu ứng pháo hoa giấy tưng bừng ăn mừng
+                    triggerConfetti();
 
-                // Đồng bộ hóa tải lại dữ liệu chuẩn từ server
-                setTimeout(() => {
-                    fetchWishes();
-                }, 2000);
+                    // Đồng bộ hóa tải lại dữ liệu chuẩn từ server
+                    setTimeout(() => {
+                        fetchWishes();
+                    }, 2000);
 
-                setTimeout(() => {
-                    document.getElementById('rsvp-form').reset();
-                    status.classList.add('hidden');
-                    btn.innerText = origText;
-                    btn.disabled = false;
-                }, 3000);
-            })
-            .catch(err => {
-                console.error("Lỗi gửi phản hồi lên Google Sheets:", err);
-                btn.innerText = "GỬI LẠI";
-                btn.disabled = false;
+                    setTimeout(() => {
+                        const formEl = document.getElementById('rsvp-form');
+                        if (formEl) formEl.reset();
+                        if (status) status.classList.add('hidden');
+                        if (btn) {
+                            btn.innerText = origText;
+                            btn.disabled = false;
+                        }
+                    }, 3000);
+                })
+                .catch(err => {
+                    console.error("Lỗi gửi phản hồi lên Google Sheets:", err);
+                    if (btn) {
+                        btn.innerText = "GỬI LẠI";
+                        btn.disabled = false;
+                    }
+                });
             });
-        });
+        }
     </script>
 </body>
 </html>
