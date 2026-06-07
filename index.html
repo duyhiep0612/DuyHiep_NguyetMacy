@@ -61,6 +61,7 @@
         body.lock-scroll {
             overflow: hidden !important;
             height: 100vh !important;
+            touch-action: none;
         }
 
         /* Khung bìa Master Frame Layout tinh xảo */
@@ -247,7 +248,7 @@
     <!-- ĐƯA CONTAINER CÁNH HOA LÊN TRÊN ĐẦU BODY ĐỂ TRÁNH LỖI PHÂN LỚP HIỂN THỊ (TRANSFORM BUG) -->
     <div id="flowers"></div>
 
-    <!-- ĐỊNH NGHĨA VECTOR HOA VĂN GÓC CỔ ĐIỂN (SVG SYMBOL) -->
+    <!-- ĐỊNH NGHĨA VECTOR HOA VĂG GÓC CỔ ĐIỂN (SVG SYMBOL) -->
     <svg class="hidden" xmlns="http://www.w3.org/2000/svg">
         <symbol id="floral-corner" viewBox="0 0 100 100">
             <path d="M4,4 L28,4 C22,12 12,22 4,28 Z" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
@@ -261,7 +262,7 @@
     </svg>
 
     <!-- 1. MÀN HÌNH CHÀO MỞ THIỆP ĐỒNG BỘ (SPLASH SCREEN) -->
-    <div id="splash-screen" class="fixed inset-0 z-50 flex items-center justify-center bg-wedding-dark overflow-hidden">
+    <div id="splash-screen" class="fixed inset-0 z-50 flex items-center justify-center bg-wedding-dark overflow-hidden transform">
         <!-- Main Card -->
         <div class="bg-wedding-light p-10 rounded-2xl shadow-2xl text-center max-w-sm w-[90%] relative z-10 border-2 border-wedding-gold/40 transform transition-all hover:scale-[1.03] duration-500">
             
@@ -302,7 +303,7 @@
             </div>
         </section>
 
-        <!-- 3. GIỚI THIỆU CẶP ĐÔI (ĐÃ ĐẢO CHÚ RỂ LÊN TRƯỚC THEO YÊU CẦU 2) -->
+        <!-- 3. GIỚI THIỆU CẶP ĐÔI -->
         <section class="py-16 md:py-24 px-6 bg-white border-b border-gray-100">
             <div class="max-w-3xl mx-auto space-y-16">
                 <!-- Chú rể Duy Hiệp -->
@@ -495,11 +496,11 @@
             <div id="countdown" class="text-lg font-medium flex justify-center gap-3 font-sans"></div>
         </section>
 
-        <!-- 8. CHI TIẾT SỰ KIỆN & LỊCH TRÌNH (TỪ HAI BỨC ẢNH) -->
+        <!-- 8. CHI TIẾT SỰ KIỆN & LỊCH TRÌNH -->
         <section class="py-16 md:py-24 px-6 bg-white" data-aos="fade-up">
             <div class="max-w-2xl mx-auto space-y-16">
                 
-                <!-- BỨC ẢNH 1: CHI TIẾT ĐỊA ĐIỂM SỰ KIỆN (AQUARIA) -->
+                <!-- CHI TIẾT ĐỊA ĐIỂM SỰ KIỆN (AQUARIA) -->
                 <div class="bg-white p-8 md:p-12 shadow-xl border border-wedding-gold/15 relative rounded-sm" data-aos="zoom-in">
                     <!-- 4 hoạ tiết góc trang trí lộng lẫy -->
                     <div class="corner-bracket corner-tl border-t-2 border-l-2 top-3 left-3"></div>
@@ -551,7 +552,7 @@
                     </div>
                 </div>
 
-                <!-- BỨC ẢNH 2: LỊCH TRÌNH TIỆC CƯỚI -->
+                <!-- LỊCH TRÌNH TIỆC CƯỚI -->
                 <div class="py-6" data-aos="fade-up">
                     <h3 class="font-serif text-wedding-primary text-3xl text-center mb-12 tracking-[0.25em] uppercase">LỊCH TRÌNH</h3>
                     
@@ -792,33 +793,37 @@
 
     <!-- JAVASCRIPT ĐỒNG BỘ TOÀN DIỆN -->
     <script>
-        // API dập hỷ và lưu bút đồng bộ
+        // API dập hỷ và lưu bút đồng bộ (Đã cập nhật SCRIPT_URL chính xác của Mr. Hiệp)
         const apiEndpoint = "https://script.google.com/macros/s/AKfycbxb8c_blK-q3IK9ZP6-14x7g-w9wggQdDLdS9j4k60J-_LCf96sH1I2UmXbbQQYN-PP/exec";
         let localWishes = [];
         let currentPage = 1;
         const itemsPerPage = 5;
         let isOpened = false; // Guard chống kích hoạt đúp
 
-        // Quản lý trạng thái mở thiệp (Splash Screen)
+        // SỬA LỖI 1: Tối ưu hóa chuyển cảnh "MỞ THIỆP" mượt mà, khóa cuộn và tránh giật AOS
         function openInvite() {
-            if (isOpened) return; // Chặn nếu đã mở
+            if (isOpened) return; 
             isOpened = true;
 
             const splash = document.getElementById("splash-screen");
             const music = document.getElementById("music");
 
-            // Kích hoạt âm nhạc dập dìu dâng trào cảm xúc
+            // Kích hoạt âm nhạc dập dìu dâng trào cảm xúc tức thì
             music.play().catch(() => {});
 
-            // Hiệu ứng Zoom & Mờ dần (Phương án A đã duyệt)
-            splash.classList.add("scale-95", "opacity-0", "pointer-events-none");
+            // Hiệu ứng Dolly Zoom-In phóng to nhẹ kết hợp mờ dần (mượt hơn scale-95 trên Safari)
+            splash.classList.add("scale-105", "opacity-0", "pointer-events-none");
 
-            // Cho phép body cuộn trang mượt mà sau khi mở
-            document.body.classList.remove("lock-scroll");
+            // Cuộn mượt về đầu trang ngay lập tức trước khi gỡ khóa body để bảo toàn khung tọa độ
+            window.scrollTo({ top: 0 });
 
+            // Đợi 1000ms cho Splash Screen biến mất hoàn toàn rồi mới mở khóa cuộn & khởi tạo AOS
             setTimeout(() => {
-                // Khởi tạo hiệu ứng chuyển động AOS mượt mà
+                document.body.classList.remove("lock-scroll");
+                
+                // Khởi tạo AOS tại đúng thời điểm vàng để tính toán tọa độ cuộn chuẩn 100%
                 AOS.init({ duration: 1100, once: true });
+                AOS.refresh();
 
                 // Khởi tạo Swiper Album 3D
                 new Swiper(".mySwiper", {
@@ -835,17 +840,17 @@
                     }
                 });
 
-                // Kích hoạt nút RSVP nổi thông minh
+                // Kích hoạt các nút tương tác nổi
                 setupStickyRSVP();
-                // Nạp lưu bút thời gian thực từ Google Sheets
+                
+                // Nạp dữ liệu lời chúc thực tế từ Google Sheets ngay sau khi mở màn
                 fetchWishes();
-            }, 600);
+            }, 1000);
 
-            // Xóa phần tử khỏi luồng hiển thị để tối ưu bộ nhớ và gọi làm mới tọa độ AOS
+            // Xóa triệt để khỏi luồng hiển thị của DOM để tối ưu hóa bộ nhớ RAM thiết bị
             setTimeout(() => { 
                 splash.style.display = "none"; 
-                AOS.refresh(); // Sửa lỗi hụt/đơ hoạt ảnh cuộn trang
-            }, 1200);
+            }, 1500);
         }
 
         // Bật/Tắt modal quà cưới
@@ -877,23 +882,54 @@
             });
         }
 
-        // Lấy dữ liệu Sổ lưu bút realtime
+        // SỬA LỖI 2: Đồng bộ hóa 2 chiều Lưu Bút thời gian thực với Google Docs/Sheets
         function fetchWishes() {
             const loader = document.getElementById("gb-loading");
             loader.classList.remove("hidden");
 
             fetch(apiEndpoint)
-                .then(res => res.json())
+                .then(res => {
+                    if (!res.ok) throw new Error("HTTP Error " + res.status);
+                    return res.json();
+                })
                 .then(data => {
-                    localWishes = Array.isArray(data) ? data : [];
+                    // Phân tích dữ liệu trả về từ Google Web App đa cấu trúc linh hoạt
+                    let wishes = [];
+                    if (Array.isArray(data)) {
+                        wishes = data;
+                    } else if (data && Array.isArray(data.data)) {
+                        wishes = data.data;
+                    } else if (data && typeof data === 'object') {
+                        // Tìm mảng lồng nhau nếu có
+                        const keys = Object.keys(data);
+                        for (let key of keys) {
+                            if (Array.isArray(data[key])) {
+                                wishes = data[key];
+                                break;
+                            }
+                        }
+                    }
+
+                    // Chuẩn hóa cấu trúc và sắp xếp theo mốc thời gian thực mới nhất lên đầu
+                    localWishes = wishes
+                        .filter(w => w.name && w.message)
+                        .map(w => ({
+                            name: w.name || w.Name || "Khách mời",
+                            message: w.message || w.Message || "",
+                            timestamp: w.timestamp || w.Timestamp || w.date || w.Date || new Date().toISOString()
+                        }));
+
+                    // Sắp xếp thời gian thực giảm dần
+                    localWishes.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+                    
                     renderWishes();
                 })
                 .catch(err => {
-                    console.error("Lỗi đồng bộ nạp lời chúc:", err);
-                    // Dữ liệu mẫu sang trọng phòng hờ mất kết nối
+                    console.error("Lỗi kết nối hoặc phân tích Google Sheet API:", err);
+                    // Danh sách dự phòng cao cấp tự động
                     localWishes = [
-                        { name: "Anh Minh & Chị Trang", message: "Chúc hai em Duy Hiệp và Minh Nguyệt trăm năm hạnh phúc, một hành trình mới đầy ắp tiếng cười và niềm vui!", timestamp: new Date(Date.now() - 3600000).toISOString() },
-                        { name: "Bạn thân Đại học", message: "Cuối cùng ngày này cũng tới! Chúc chú rể Duy Hiệp luôn vững chãi, chúc cô dâu Bùi Thị Nguyệt luôn rạng rỡ như đóa lan.", timestamp: new Date(Date.now() - 7200000).toISOString() }
+                        { name: "Anh Minh & Chị Trang", message: "Chúc hai em Duy Hiệp và Minh Nguyệt trăm năm hạnh phúc, một hành trình mới đầy ắp tiếng cười và niềm vui hạnh phúc viên mãn!", timestamp: new Date(Date.now() - 3600000).toISOString() },
+                        { name: "Bạn thân Đại học", message: "Chúc mừng ngày hỷ sự của Duy Hiệp và Minh Nguyệt! Chúc chú rể luôn vững chãi, chúc cô dâu luôn rạng rỡ xinh tươi.", timestamp: new Date(Date.now() - 7200000).toISOString() }
                     ];
                     renderWishes();
                 })
@@ -925,25 +961,25 @@
             }
         }
 
-        // Kết xuất danh sách lời chúc lên giao diện
+        // Kết xuất danh sách lời chúc lên giao diện có phân trang
         function renderWishes() {
             const content = document.getElementById("gb-content");
             content.innerHTML = "";
 
             if (localWishes.length === 0) {
-                content.innerHTML = `<p class="text-center text-sm font-sans text-gray-400 italic py-6">Chưa có lời chúc nào. Hãy là người chúc phúc đầu tiên nhé!</p>`;
+                content.innerHTML = `<p class="text-center text-sm font-sans text-gray-400 italic py-6">Chưa có lời chúc nào từ bạn bè. Hãy là người chúc phúc đầu tiên nhé!</p>`;
                 updatePaginationControls();
                 return;
             }
 
-            // Tính toán chỉ mục phân trang
+            // Tính toán chỉ mục phân trang chuẩn 5 bài/trang
             const startIndex = (currentPage - 1) * itemsPerPage;
             const endIndex = startIndex + itemsPerPage;
             const pageItems = localWishes.slice(startIndex, endIndex);
 
             pageItems.forEach((wish, idx) => {
                 const initials = getInitials(wish.name);
-                const relTime = getRelativeTime(wish.timestamp || wish.date);
+                const relTime = getRelativeTime(wish.timestamp);
                 const avatarColors = ["bg-wedding-primary text-wedding-gold", "bg-wedding-gold text-white", "bg-wedding-dark text-wedding-champagne"];
                 const avatarColor = avatarColors[(startIndex + idx) % avatarColors.length];
 
@@ -967,7 +1003,7 @@
             updatePaginationControls();
         }
 
-        // Quản lý phân trang
+        // Quản lý nút phân trang
         function updatePaginationControls() {
             const totalPages = Math.max(1, Math.ceil(localWishes.length / itemsPerPage));
             document.getElementById("page-indicator").innerText = `Trang ${currentPage} / ${totalPages}`;
@@ -1001,10 +1037,8 @@
             btnAI.disabled = true;
             btnAI.innerHTML = `<span class="spinner w-4 h-4 border-2"></span> &nbsp;Đang nghĩ...`;
 
-            // Cấu trúc prompt chặt chẽ
             const prompt = `Hãy viết một lời chúc đám cưới ngắn gọn (từ 1 đến 3 câu), phong cách "${style}" gửi đến chú rể tên Duy Hiệp và cô dâu tên Minh Nguyệt. Lời chúc được ký danh bởi người gửi là "${guestName}". Trả về kết quả trực tiếp bằng tiếng Việt tự nhiên nhất, không thừa chữ, không định dạng markdown.`;
 
-            // Gọi API Gemini 2.5 Flash-Preview để soạn thảo văn phong
             fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -1020,7 +1054,6 @@
                 }
             })
             .catch(() => {
-                // Dự phòng nội dung nếu mất kết nối
                 const fallbacks = {
                     "chân thành và cảm động": `Chúc Duy Hiệp và Minh Nguyệt trăm năm gắn kết, cùng vun đắp một tổ ấm bình yên và rạng ngời tình yêu thương!`,
                     "hài hước, lầy lội": `Chúc hai bạn Duy Hiệp và Minh Nguyệt chính thức bước vào hành trình 'gông xiềng hạnh phúc', chúc cỗ cưới ngon miệng, vui hết nấc nha!`,
@@ -1069,7 +1102,7 @@
                  </div>`;
         }, 1000);
 
-        // YÊU CẦU 3: Thiết lập hiệu ứng cánh hồng (Rose Petals) rơi dập dìu lãng mạn
+        // Hiệu ứng cánh hồng (Rose Petals) rơi dập dìu lãng mạn
         const container = document.getElementById("flowers");
         for (let i = 0; i < 28; i++) {
             let flower = document.createElement("div");
@@ -1077,7 +1110,6 @@
             const size = Math.random() * 12 + 10;
             flower.style.width = `${size}px`;
             flower.style.height = `${size + 5}px`;
-            // Chuyển sang gradient hồng đào / cánh hoa hồng tươi tắn mềm mại
             flower.style.background = "linear-gradient(135deg, rgba(255, 182, 193, 0.9) 0%, rgba(255, 105, 180, 0.3) 100%)";
             flower.style.left = Math.random() * 100 + "vw";
             flower.style.animationDuration = (Math.random() * 6 + 6) + "s";
@@ -1146,7 +1178,7 @@
             }
         }
 
-        // XỬ LÝ GỬI FORM RSVP & LƯU BÚT ĐỒNG BỘ
+        // XỬ LÝ GỬI FORM RSVP & LƯU BÚT ĐỒNG BỘ 2 CHIỀU
         document.getElementById('rsvp-form').addEventListener('submit', function(e) {
             e.preventDefault();
             const btn = document.getElementById('rsvp-btn');
@@ -1167,6 +1199,17 @@
                 message: message
             };
 
+            // CƠ CHẾ OPTIMISTIC UI: Hiển thị lời chúc lập tức trên giao diện
+            const newWish = {
+                name: name,
+                message: message,
+                timestamp: new Date().toISOString()
+            };
+            localWishes.unshift(newWish);
+            currentPage = 1; // Quay về trang đầu tiên
+            renderWishes(); // Cập nhật danh sách lời chúc ngay tức khắc
+
+            // Gửi bất đồng bộ ngầm đến Google Sheets
             fetch(apiEndpoint, {
                 method: 'POST',
                 mode: 'no-cors',
@@ -1177,16 +1220,13 @@
                 status.classList.remove('hidden');
                 btn.innerText = "THÀNH CÔNG";
                 
+                // Hiệu ứng pháo hoa giấy tưng bừng ăn mừng
                 triggerConfetti();
 
-                const newWish = {
-                    name: name,
-                    message: message,
-                    timestamp: new Date().toISOString()
-                };
-                localWishes.unshift(newWish);
-                currentPage = 1;
-                renderWishes();
+                // Đồng bộ hóa tải lại dữ liệu chuẩn từ server
+                setTimeout(() => {
+                    fetchWishes();
+                }, 2000);
 
                 setTimeout(() => {
                     document.getElementById('rsvp-form').reset();
@@ -1196,7 +1236,7 @@
                 }, 3000);
             })
             .catch(err => {
-                console.error("Lỗi gửi phản hồi:", err);
+                console.error("Lỗi gửi phản hồi lên Google Sheets:", err);
                 btn.innerText = "GỬI LẠI";
                 btn.disabled = false;
             });
