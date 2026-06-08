@@ -329,6 +329,18 @@
     <!-- KHUNG HÌNH CHÍNH (MASTER FRAME) -->
     <div id="main-content" class="font-serif">
 
+        <!-- 2. BANNER HERO -->
+        <section class="hero min-h-screen flex items-center justify-center text-center text-white relative">
+            <div class="relative z-10 px-6 py-16">
+                <h1 class="font-script text-6xl md:text-8xl mb-6 text-white drop-shadow-sm">Duy Hiệp & Minh Nguyệt</h1>
+                <p class="text-xs md:text-sm tracking-[0.3em] uppercase font-sans font-semibold text-wedding-gold">Save The Date</p>
+                <div class="inline-flex items-center justify-center w-16 h-16 my-6 rounded-full bg-wedding-primary/20 border border-wedding-gold/30 backdrop-blur-sm shadow-md">
+                    <span class="text-wedding-gold text-2xl font-bold">囍</span>
+                </div>
+                <p class="text-2xl md:text-3xl font-semibold font-sans tracking-[0.25em] text-wedding-gold">19.09.2026</p>
+            </div>
+        </section>
+
         <!-- 3. GIỚI THIỆU CẶP ĐÔI -->
         <section class="py-16 md:py-24 px-6 bg-white border-b border-gray-100">
             <div class="max-w-3xl mx-auto space-y-16">
@@ -520,7 +532,7 @@
             <div id="countdown" class="text-lg font-bold flex justify-center gap-3 font-sans"></div>
         </section>
 
-        <!-- 8. CHI TIẾS SỰ KIỆN & LỊCH TRÌNH -->
+        <!-- 8. CHI TIẾT SỰ KIỆN & LỊCH TRÌNH -->
         <section class="py-16 md:py-24 px-6 bg-white" data-aos="fade-up">
             <div class="max-w-2xl mx-auto space-y-16">
                 
@@ -629,7 +641,7 @@
             </div>
         </section>
 
-        <!-- 9. LỜI TRI ÂN CHA MẸ -->
+        <!-- 9. LỜI TRI ÂN CHA MẸ (Nét chữ đậm đà, sắc sảo) -->
         <section class="py-16 md:py-24 px-6 bg-[#faf9f6] border-t border-b border-gray-100" data-aos="fade-up">
             <div class="max-w-2xl mx-auto text-center border border-wedding-gold/20 rounded-lg bg-white p-8 md:p-14 shadow-sm relative">
                 <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-white px-4 text-wedding-gold text-lg">❤</div>
@@ -690,10 +702,10 @@
                         <div class="flex flex-col sm:flex-row justify-between items-center gap-4 border-t border-wedding-gold/10 pt-6">
                             <div class="flex items-center gap-1.5 w-full sm:w-auto bg-wedding-bg p-1.5 rounded-sm border border-wedding-gold/15">
                                 <select id="ai-style" class="p-2 border-none bg-transparent text-wedding-primary font-sans text-xs font-extrabold focus:outline-none cursor-pointer">
-                                    <option value="chân thành và cảm động">Chân thành</option>
-                                    <option value="hài hước, lầy lội">Hài hước</option>
-                                    <option value="ngôn tình, lãng mạn">Ngôn tình</option>
-                                    <option value="thơ lục bát (2 đến 4 câu)">Thơ lục bát</option>
+                                    <option value="chân thành">Chân thành</option>
+                                    <option value="hài hước">Hài hước</option>
+                                    <option value="ngôn tình">Ngôn tình</option>
+                                    <option value="thơ lục bát">Thơ lục bát</option>
                                 </select>
                                 <button type="button" id="btn-ai-wish" onclick="generateAIWish()"
                                         class="bg-gradient-to-r from-wedding-gold to-wedding-gold-dark hover:from-wedding-gold-dark hover:to-wedding-gold text-white px-4 py-2 rounded-sm font-sans text-xs font-extrabold transition-all shadow-sm flex items-center justify-center gap-1 min-w-[130px] uppercase tracking-wider">
@@ -739,7 +751,7 @@
             </div>
         </section>
 
-        <!-- 11. HỘP MỪNG CƯỚI -->
+        <!-- 11. HỘP MỪNG CƯỚI (Yêu cầu 1: Thu nhỏ 50% [w-28 h-36], Thêm chuyển động lắc lắc và đồng xu vàng rơi bay bổng) -->
         <section class="py-16 text-center bg-section-accent border-t border-gray-100" data-aos="zoom-in">
             <h3 class="text-2xl font-serif text-wedding-primary mb-12 tracking-[0.25em] uppercase font-bold">Mừng Cưới</h3>
             
@@ -829,6 +841,24 @@
         let currentPage = 1;
         const itemsPerPage = 5;
         let isOpened = false; // Guard chống kích hoạt đúp
+
+        // Tạo thông báo Toast tùy chỉnh sang trọng thay thế alert() theo đúng chuẩn kỹ thuật
+        function showToast(msg) {
+            let toast = document.getElementById("custom-toast");
+            if (!toast) {
+                toast = document.createElement("div");
+                toast.id = "custom-toast";
+                toast.className = "fixed top-5 left-1/2 -translate-x-1/2 z-[9999] bg-red-800 text-white font-sans text-xs font-bold px-6 py-3.5 rounded-full shadow-2xl transition-all duration-300 opacity-0 pointer-events-none border-2 border-wedding-gold/40 uppercase tracking-widest text-center min-w-[280px]";
+                document.body.appendChild(toast);
+            }
+            toast.innerText = msg;
+            toast.classList.remove("opacity-0", "pointer-events-none");
+            toast.classList.add("opacity-100");
+            setTimeout(function() {
+                toast.classList.remove("opacity-100");
+                toast.classList.add("opacity-0", "pointer-events-none");
+            }, 3500);
+        }
 
         // Tối ưu hóa chuyển cảnh "MỞ THIỆP" mượt mà, khóa cuộn và tránh giật AOS
         function openInvite() {
@@ -931,7 +961,7 @@
                 }
             }
 
-            // Ánh xạ các cột: time, name, message sang cấu trúc nạp cục bộ
+            // Ánh xạ các cột: time, name, message sang cấu trúc nạp cục bộ (Strict: Chỉ Lấy tên, thời gian và Lời chúc)
             localWishes = wishes
                 .filter(function(w) {
                     return (w.name || w.Name) && (w.message || w.Message);
@@ -1009,7 +1039,7 @@
             return name.trim().split(" ").pop().charAt(0).toUpperCase();
         }
 
-        // Hiển thị mốc thời gian gửi chính xác dạng HH:mm dd/MM/yyyy
+        // Hiển thị mốc thời gian gửi chính xác dạng HH:mm dd/MM/yyyy (Yêu cầu 3)
         function getExactTime(timeStr) {
             if (!timeStr) return "Vừa xong";
             
@@ -1035,7 +1065,7 @@
             }
         }
 
-        // Kết xuất danh sách lời chúc lên giao diện có phân trang
+        // Kết xuất danh sách lời chúc lên giao diện có phân trang (Chỉ Lấy tên, thời gian và Lời chúc)
         function renderWishes() {
             const content = document.getElementById("gb-content");
             if (!content) return;
@@ -1098,7 +1128,7 @@
             if (listEl) listEl.scrollIntoView({ behavior: 'smooth' });
         }
 
-        // Trí tuệ nhân tạo viết thiệp tự động (Gemini Flash-Preview)
+        // SỬA LỖI 1: Trí tuệ nhân tạo viết thiệp tự động (Gemini Flash-Preview) - Sửa triệt để bug random fallbacks
         function generateAIWish() {
             const nameInput = document.getElementById("gb-name") || document.getElementById("guest-name");
             const styleSelect = document.getElementById("ai-style");
@@ -1106,12 +1136,12 @@
 
             const guestName = nameInput ? nameInput.value.trim() : "";
             if (!guestName) {
-                alert("Vui lòng điền tên của bạn trước để Trợ lý AI có thể cá nhân hóa lời chúc!");
+                showToast("Vui lòng điền tên của bạn trước để Trợ lý AI có thể cá nhân hóa lời chúc!");
                 if (nameInput) nameInput.focus();
                 return;
             }
 
-            const style = styleSelect ? styleSelect.value : "chân thành và cảm động";
+            const style = styleSelect ? styleSelect.value : "chân thành";
             const btnAI = document.getElementById("btn-ai-wish");
             const originalText = btnAI ? btnAI.innerHTML : "✨ Nhờ AI viết";
             if (btnAI) {
@@ -1121,6 +1151,7 @@
 
             const prompt = `Hãy viết một lời chúc đám cưới ngắn gọn (từ 1 đến 3 câu), phong cách "${style}" gửi đến chú rể tên Duy Hiệp và cô dâu tên Minh Nguyệt. Lời chúc được ký danh bởi người gửi là "${guestName}". Trả về kết quả trực tiếp bằng tiếng Việt tự nhiên nhất, không thừa chữ, không định dạng markdown.`;
 
+            // Gọi API Gemini 2.5 Flash-Preview để soạn thảo văn phong cá nhân hóa
             fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -1136,8 +1167,9 @@
                 }
             })
             .catch(function() {
+                // Sửa lỗi gán mảng và random đồng bộ với khóa chọn option đã duyệt
                 const fallbacks = {
-                    "chân thành và cảm động": [
+                    "chân thành": [
                         "Chúc Duy Hiệp và Minh Nguyệt trăm năm gắn kết, cùng vun đắp một tổ ấm bình yên và rạng ngời tình yêu thương!",
                         "Chúc hai bạn luôn nắm chặt tay nhau vượt qua mọi chặng đường, cùng xây dựng một mái ấm ngập tràn tiếng cười.",
                         "Từ hôm nay, hai trái tim đã chung một nhịp đập. Chúc anh chị mãi hạnh phúc và viên mãn bên nhau.",
@@ -1154,7 +1186,7 @@
                         "Xin chúc đôi vợ chồng trẻ luôn đồng hành, sẻ chia và yêu thương nhau suốt cuộc đời.",
                         "Chúc hai bạn một cuộc sống hôn nhân ngọt ngào, bình an và ngập tràn tiếng cười."
                     ],
-                    "hài hước, lầy lội": [
+                    "hài hước": [
                         "Chúc hai bạn chính thức gia nhập hội những người không được tự quyết cuối tuần nữa nhé!",
                         "Chúc cuộc sống hôn nhân luôn vui vẻ, cơm lành canh ngọt, wifi mạnh và không ai giành điều khiển TV.",
                         "Từ nay hết FA, chúc hai bạn hạnh phúc và nhớ phát cẩu lương vừa phải thôi nhé!",
@@ -1171,8 +1203,7 @@
                         "Chúc hai bạn mãi là cặp đôi đẹp nhất trong mắt nhau, kể cả lúc mới ngủ dậy.",
                         "Hôm nay cưới nhau, mai vẫn yêu nhau, cuối tháng vẫn còn tiền là thành công mỹ mãn!"
                     ],
-
-                    "ngôn tình, lãng mạn": [
+                    "ngôn tình": [
                         "Giữa muôn vàn người ngoài kia, hai bạn đã tìm thấy nhau. Chúc tình yêu ấy mãi vẹn nguyên theo năm tháng.",
                         "Từ khoảnh khắc này, mọi bình minh và hoàng hôn đều trở nên ý nghĩa hơn vì có nhau đồng hành.",
                         "Chúc câu chuyện tình yêu của Duy Hiệp và Minh Nguyệt luôn đẹp như những chương cuối của một cuốn tiểu thuyết.",
@@ -1189,8 +1220,7 @@
                         "Tình yêu chân thành sẽ luôn tìm được đường về bên nhau. Chúc hai bạn trọn đời viên mãn.",
                         "Mong rằng mỗi năm trôi qua, hai bạn lại càng yêu nhau nhiều hơn năm trước."
                     ],
-
-                    "thơ lục bát (2 đến 4 câu)": [
+                    "thơ lục bát": [
                         "Tơ hồng đã kết duyên ta,\nTrăm năm hạnh phúc một nhà bên nhau.",
                         "Chúc cho duyên thắm bền lâu,\nVợ chồng hạnh phúc bạc đầu không phai.",
                         "Ngày vui pháo nổ rộn vang,\nTrăm năm tình nghĩa vững vàng sắt son.",
@@ -1207,12 +1237,15 @@
                         "Duyên trời se sợi chỉ hồng,\nChúc đôi hạnh phúc mặn nồng dài lâu.",
                         "Tình yêu kết nụ đơm hoa,\nTrăm năm viên mãn một nhà bình yên."
                     ]
-                    };
-                    const messages = fallbacks[selectedStyle];
-                    const randomMessage =
-                    messages[Math.floor(Math.random() * messages.length)];
+                };
+                
+                // Lấy mảng dựa trên style đã chọn
+                const messages = fallbacks[style] || ["Chúc Duy Hiệp và Minh Nguyệt trăm năm hạnh phúc viên mãn!"];
+                // Chọn ngẫu nhiên một lời chúc từ mảng
+                const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+                
                 if (messageArea) {
-                    messageArea.value = fallbacks[style] || `Chúc Duy Hiệp và Minh Nguyệt trăm năm hạnh phúc viên mãn!`;
+                    messageArea.value = randomMessage;
                 }
             })
             .finally(function() {
@@ -1276,7 +1309,7 @@
                 flower.style.height = (size + 5) + "px";
                 flower.style.background = "linear-gradient(135deg, rgba(255, 182, 193, 0.9) 0%, rgba(255, 105, 180, 0.3) 100%)";
                 flower.style.left = Math.random() * 100 + "vw";
-                // FIX LỖI CÚ PHÁP )s CỦA TRÌNH BIÊN DỊCH TẠI ĐÂY
+                // Khắc phục triệt để lỗi cú pháp ghép chuỗi s để tránh gián đoạn biên dịch
                 flower.style.animationDuration = (Math.random() * 6 + 6) + "s"; 
                 flower.style.animationDelay = Math.random() * 6 + "s";
                 container.appendChild(flower);
