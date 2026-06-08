@@ -842,7 +842,7 @@
     <!-- JAVASCRIPT ĐỒNG BỘ TOÀN DIỆN -->
     <script>
         // API dập hỷ và lưu bút đồng bộ (Đã khôi phục chuẩn xác SCRIPT_URL gốc của Mr. Hiệp)
-        const apiEndpoint = "https://script.google.com/macros/s/AKfycbxb8c_blK-q3IK9ZP6-14x7g-w9wggQdDLdS9j4k60J-_LCf96sH1I2UmXbbQQYN-PP/exec";
+        const apiEndpoint = "https://script.google.com/macros/s/AKfycbxDqUa5kVYGe9JmlInrBu9n5Jb_JU1WMLugH5ecDXmp4raxMB6uKXzyhDraFchISjWV/exec";
         
         // Vui lòng gán API Key của anh vào đây để chạy trí tuệ nhân tạo ngoài môi trường sandbox
         const geminiApiKey = ""; 
@@ -1084,61 +1084,48 @@
             renderWishes();
         }
 
-        // ĐỒNG BỘ 2 CHIỀU LƯU BÚT THỜI GIAN THỰC (Tích hợp chuỗi proxy phân cấp không gây crash console)
+        // ĐỒNG BỘ ĐỌC DỮ LIỆU SỬ DỤNG JSONP - Độc lập CORS 100% cho cả Sandbox lẫn Production
         function fetchWishes() {
             const loader = document.getElementById("gb-loading");
             if (loader) loader.classList.remove("hidden");
 
-            // Danh sách các luồng kết nối phân cấp (Cascade connection chain)
-            const fetchAttempts = [
-                // 1. Thử kết nối trực tiếp đến Script của anh (Tốt nhất cho live production)
-                {
-                    url: apiEndpoint,
-                    parse: (res) => res.json()
-                },
-                // 2. Thử qua CORSProxy.io cực kỳ nhanh và uy tín
-                {
-                    url: "https://corsproxy.io/?" + encodeURIComponent(apiEndpoint),
-                    parse: (res) => res.json()
-                },
-                // 3. Thử qua AllOrigins (Dự phòng cuối cùng)
-                {
-                    url: "https://api.allorigins.win/get?url=" + encodeURIComponent(apiEndpoint) + "&_nocache=" + Date.now(),
-                    parse: (res) => res.json().then(data => JSON.parse(data.contents))
-                }
-            ];
+            // Tạo callback ngẫu nhiên tránh caching trình duyệt
+            const callbackName = "getWishes_" + Math.floor(Math.random() * 1000000);
+            window[callbackName] = function(data) {
+                handleWishData(data);
+                if (loader) loader.classList.add("hidden");
+                
+                // Dọn dẹp script tag sau khi nạp thành công
+                const script = document.getElementById(callbackName);
+                if (script) script.remove();
+                delete window[callbackName];
+            };
 
-            let attemptIndex = 0;
-
-            function runFetchChain() {
-                if (attemptIndex >= fetchAttempts.length) {
-                    // Nếu tất cả phương thức bị Sandbox của editor chặn lại, chuyển sang dữ liệu mẫu một cách êm ái
-                    console.warn("Đang chạy trong môi trường Preview Sandbox có chế độ bảo mật nghiêm ngặt. Hệ thống chuyển đổi sang nạp danh sách lời chúc dự phòng.");
+            const script = document.createElement("script");
+            script.id = callbackName;
+            script.src = apiEndpoint + "?callback=" + callbackName + "&_nocache=" + Date.now();
+            
+            // Xử lý Timeout tự động sau 6s (nếu Apps Script lỗi hoặc sai endpoint)
+            const timeoutId = setTimeout(function() {
+                if (window[callbackName]) {
+                    console.warn("Yêu cầu JSONP quá thời gian phản hồi. Đang tải lời chúc dự phòng.");
                     useFallbackWishes();
                     if (loader) loader.classList.add("hidden");
-                    return;
+                    delete window[callbackName];
+                    script.remove();
                 }
+            }, 6000);
 
-                const currentAttempt = fetchAttempts[attemptIndex];
-                attemptIndex++;
+            script.onerror = function() {
+                clearTimeout(timeoutId);
+                console.error("Script JSONP tải thất bại.");
+                useFallbackWishes();
+                if (loader) loader.classList.add("hidden");
+                delete window[callbackName];
+                script.remove();
+            };
 
-                fetch(currentAttempt.url)
-                    .then(function(res) {
-                        if (!res.ok) throw new Error("HTTP Error " + res.status);
-                        return currentAttempt.parse(res);
-                    })
-                    .then(function(data) {
-                        handleWishData(data);
-                        if (loader) loader.classList.add("hidden");
-                    })
-                    .catch(function(err) {
-                        // Thất bại luồng này, tiếp tục nhảy sang luồng tiếp theo trong danh sách dự phòng
-                        console.log(`Lượt nạp dữ liệu ${attemptIndex} không thành công do rào cản Sandbox. Đang thử cách dự phòng tiếp theo...`);
-                        runFetchChain();
-                    });
-            }
-
-            runFetchChain();
+            document.head.appendChild(script);
         }
 
         // Tạo avatar ký tự sang trọng
@@ -1467,7 +1454,7 @@
             }
         }
 
-        // XỬ LÝ GỬI FORM RSVP & LƯU BÚT ĐỒNG BỘ 1 SHEET
+        // XỬ LÝ GỬI FORM RSVP & LƯU BÚT ĐỒNG BỘ 1 SHEET (Áp dụng JSONP qua GET chống CORS triệt để)
         const rsvpForm = document.getElementById('rsvp-form');
         if (rsvpForm) {
             rsvpForm.addEventListener('submit', function(e) {
@@ -1507,72 +1494,85 @@
                     renderWishes();
                 }
 
-                // Gửi bất đồng bộ chuẩn CORS sử dụng "text/plain" làm màng bọc để lách CORS Preflight OPTIONS
-                fetch(apiEndpoint, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'text/plain' },
-                    body: JSON.stringify(payload)
-                })
-                .then(function(res) {
-                    if (!res.ok) throw new Error("HTTP Error " + res.status);
-                    return res.json();
-                })
-                .then(function(result) {
+                // Thiết lập cấu trúc gửi dữ liệu bằng JSONP lách CORS Preflight OPTIONS
+                const callbackName = "rsvp_submit_" + Math.floor(Math.random() * 1000000);
+                window[callbackName] = function(result) {
                     if (result && result.status === "success") {
-                        if (status) status.classList.remove('hidden');
-                        if (btn) btn.innerText = "THÀNH CÔNG";
-                        
-                        // Hiệu ứng pháo hoa giấy tưng bừng ăn mừng
-                        triggerConfetti();
-
-                        // Tải lại dữ liệu chuẩn từ Google Sheet server sau 2s
-                        setTimeout(function() {
-                            fetchWishes();
-                        }, 2000);
-
-                        setTimeout(function() {
-                            const formEl = document.getElementById('rsvp-form');
-                            if (formEl) formEl.reset();
-                            if (status) status.classList.add('hidden');
-                            if (btn) {
-                                btn.innerText = origText;
-                                btn.disabled = false;
-                            }
-                        }, 3000);
+                        handleRSVPSuccess(btn, status, origText);
                     } else {
-                        throw new Error(result.message || "Spreadsheet từ chối lưu.");
+                        handleRSVPError(btn, origText, new Error(result.message || "Spreadsheet từ chối lưu."));
                     }
-                })
-                .catch(function(err) {
-                    console.error("Lỗi gửi phản hồi lên Google Sheets:", err);
-                    
-                    // Nếu lỗi do môi trường sandbox của trình soạn thảo chặn kết nối
-                    if (err.message.includes("Failed to fetch") || window.location.hostname.includes("usercontent.goog")) {
-                        showToast("Môi trường Xem trước (Preview) đã chặn gửi dữ liệu CORS. Nhưng trên Website chính thức của bạn sẽ hoạt động hoàn hảo!");
-                        
-                        // Giả lập giao diện thành công Optimistic cho người dùng xem trước hiệu ứng pháo hoa
-                        if (status) status.classList.remove('hidden');
-                        if (btn) btn.innerText = "THÀNH CÔNG";
-                        triggerConfetti();
+                    cleanup();
+                };
 
-                        setTimeout(function() {
-                            const formEl = document.getElementById('rsvp-form');
-                            if (formEl) formEl.reset();
-                            if (status) status.classList.add('hidden');
-                            if (btn) {
-                                btn.innerText = origText;
-                                btn.disabled = false;
-                            }
-                        }, 3000);
-                    } else {
-                        showToast("Lỗi gửi: " + err.message);
-                        if (btn) {
-                            btn.disabled = false;
-                            btn.innerText = "GỬI LẠI";
+                const script = document.createElement("script");
+                script.id = callbackName;
+                script.src = apiEndpoint + "?callback=" + callbackName + "&data=" + encodeURIComponent(JSON.stringify(payload)) + "&_nocache=" + Date.now();
+
+                // Quản lý thời gian chờ tối đa 6 giây
+                const timeoutId = setTimeout(function() {
+                    if (window[callbackName]) {
+                        // Nếu đang ở trong trình biên dịch sandbox của Canvas bị quá hạn kết nối, tự chuyển luồng ảo thành công
+                        if (window.location.hostname.includes("usercontent.goog")) {
+                            handleRSVPSandboxFallback(btn, status, origText);
+                        } else {
+                            handleRSVPError(btn, origText, new Error("Yêu cầu quá hạn kết nối đến Google Sheets."));
                         }
+                        cleanup();
                     }
-                });
+                }, 6000);
+
+                function cleanup() {
+                    clearTimeout(timeoutId);
+                    if (script) script.remove();
+                    delete window[callbackName];
+                }
+
+                script.onerror = function() {
+                    // Xử lý giả lập nếu lỗi kết nối do cơ chế Sandbox Iframe chặn script
+                    if (window.location.hostname.includes("usercontent.goog")) {
+                        handleRSVPSandboxFallback(btn, status, origText);
+                    } else {
+                        handleRSVPError(btn, origText, new Error("Không thể kết nối đến máy chủ Google Sheets."));
+                    }
+                    cleanup();
+                };
+
+                document.head.appendChild(script);
             });
+        }
+
+        function handleRSVPSuccess(btn, status, origText) {
+            if (status) status.classList.remove('hidden');
+            if (btn) btn.innerText = "THÀNH CÔNG";
+            
+            triggerConfetti();
+
+            // Tải lại danh sách lời chúc mới sau 2s
+            setTimeout(fetchWishes, 2000);
+
+            setTimeout(function() {
+                const formEl = document.getElementById('rsvp-form');
+                if (formEl) formEl.reset();
+                if (status) status.classList.add('hidden');
+                if (btn) {
+                    btn.innerText = origText;
+                    btn.disabled = false;
+                }
+            }, 3000);
+        }
+
+        function handleRSVPError(btn, origText, err) {
+            showToast("Lỗi gửi: " + err.message);
+            if (btn) {
+                btn.disabled = false;
+                btn.innerText = "GỬI LẠI";
+            }
+        }
+
+        function handleRSVPSandboxFallback(btn, status, origText) {
+            showToast("Môi trường Preview Sandbox chặn kết nối CORS trực tiếp. Đã chuyển sang chế độ giả lập lưu thành công!");
+            handleRSVPSuccess(btn, status, origText);
         }
     </script>
 </body>
