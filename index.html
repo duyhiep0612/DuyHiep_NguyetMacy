@@ -11,7 +11,7 @@
     <!-- Bộ Fonts Cưới Cao Cấp Mới -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Great+Vibes&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,550;0,600;0,700;1,400;1,600&family=Great+Vibes&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
@@ -32,7 +32,7 @@
                             light: '#faf9f6',        /* Cream Paper Bright */
                             bg: '#f8f6f2',           /* Matte Cream Base */
                             champagne: '#e6d5b8',    /* Soft Accent Cream */
-                            text: '#2f2f2f'          /* Dark Charcoal Text */
+                            text: '#111827'          /* Tăng độ đậm màu chữ chính thành Charcoal gần đen */
                         }
                     },
                     fontFamily: {
@@ -237,18 +237,56 @@
                 transform: translateX(-50%);
             }
         }
+
+        /* CHUYỂN ĐỘNG LẮC LƯ CHO HỘP MỪNG CƯỚI */
+        @keyframes wobble-box {
+            0%, 100% { transform: rotate(0deg) translateY(0); }
+            15% { transform: rotate(-4deg) translateY(-2px); }
+            30% { transform: rotate(3deg) translateY(1px); }
+            45% { transform: rotate(-3deg) translateY(-1px); }
+            60% { transform: rotate(2deg) translateY(0); }
+            75% { transform: rotate(-1deg) translateY(0); }
+        }
+        
+        .wobble-box-anim {
+            animation: wobble-box 3s ease-in-out infinite;
+        }
+
+        /* CHUYỂN ĐỘNG ĐỒNG XU VÀNG BAY BỔNG XUNG QUANH HỘP */
+        @keyframes coin-float-slow {
+            0% { transform: translateY(0) rotate(0deg) scale(0.9); opacity: 0.8; }
+            50% { transform: translateY(-12px) rotate(180deg) scale(1.05); opacity: 1; }
+            100% { transform: translateY(4px) rotate(360deg) scale(0.9); opacity: 0.8; }
+        }
+
+        .gold-coin {
+            position: absolute;
+            background: linear-gradient(135deg, #ffe066 0%, #f5b041 50%, #d35400 100%);
+            border-radius: 50%;
+            box-shadow: 0 4px 8px rgba(212,175,109,0.4), inset 0 1px 1px rgba(255,255,255,0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 800;
+            color: #78281f;
+            border: 1px solid #f39c12;
+            pointer-events: none;
+            z-index: 20;
+            animation: coin-float-slow 4s ease-in-out infinite;
+        }
     </style>
 </head>
 
 <!-- Thêm class lock-scroll vào body khi mới tải trang -->
-<body class="font-sans antialiased text-gray-800 lock-scroll">
+<body class="font-sans antialiased text-wedding-text lock-scroll">
     <audio id="music" loop><source src="https://cdn.chungdoi.com/music/beautiful-in-white.mp3" type="audio/mpeg"></audio>
     <canvas id="confetti-canvas"></canvas>
 
     <!-- CONTAINER CÁNH HOA LÊN TRÊN ĐẦU BODY ĐỂ TRÁNH LỖI PHÂN LỚP HIỂN THỊ (TRANSFORM BUG) -->
     <div id="flowers"></div>
 
-    <!-- ĐỊNH NGHĨA VECTOR HOA VĂN GÓC CỔ ĐIỂN (SVG SYMBOL) -->
+    <!-- ĐÍNH NGHĨA VECTOR HOA VĂN GÓC CỔ ĐIỂN (SVG SYMBOL) -->
     <svg class="hidden" xmlns="http://www.w3.org/2000/svg">
         <symbol id="floral-corner" viewBox="0 0 100 100">
             <path d="M4,4 L28,4 C22,12 12,22 4,28 Z" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
@@ -279,19 +317,19 @@
             <span class="text-2xl italic font-serif text-wedding-gold my-2 block">&</span>
             <h1 class="text-5xl font-script text-wedding-primary mt-0 mb-8 leading-tight">Minh Nguyệt</h1>
             
-            <p class="text-wedding-text mb-2 text-lg font-serif tracking-[0.25em] uppercase font-light">19 . 09 . 2026</p>
-            <p class="text-wedding-primary font-semibold mb-8 tracking-[0.2em] uppercase text-xs font-sans">Thân Mời</p>
+            <p class="text-wedding-text mb-2 text-lg font-serif tracking-[0.25em] uppercase font-semibold">19 . 09 . 2026</p>
+            <p class="text-wedding-primary font-bold mb-8 tracking-[0.2em] uppercase text-xs font-sans">Thân Mời</p>
             
-            <button id="btn-open-invite" onclick="openInvite()" class="modern-btn px-10 py-4 font-serif text-lg tracking-widest transition-all duration-500">
+            <button id="btn-open-invite" onclick="openInvite()" class="modern-btn px-10 py-4 font-serif text-lg tracking-widest font-semibold transition-all duration-500">
                 MỞ THIỆP
             </button>
         </div>
     </div>
 
     <!-- KHUNG HÌNH CHÍNH (MASTER FRAME) -->
-    <div id="main-content">
+    <div id="main-content" class="font-serif">
 
-        <!-- 3. GIỚI THIỆU CẶP ĐÔI (ĐÃ ĐẢO CHÚ RỂ DUY HIỆP LÊN TRƯỚC) -->
+        <!-- 3. GIỚI THIỆU CẶP ĐÔI -->
         <section class="py-16 md:py-24 px-6 bg-white border-b border-gray-100">
             <div class="max-w-3xl mx-auto space-y-16">
                 <!-- Chú rể Duy Hiệp -->
@@ -302,10 +340,10 @@
                         </div>
                     </div>
                     <div class="md:col-span-7 text-center md:text-left space-y-3">
-                        <p class="text-[10px] uppercase tracking-[0.35em] text-wedding-gold font-sans font-bold">The Groom</p>
-                        <h2 class="font-script text-wedding-primary text-5xl">Duy Hiệp</h2>
+                        <p class="text-[10px] uppercase tracking-[0.35em] text-wedding-gold font-sans font-extrabold">The Groom</p>
+                        <h2 class="font-script text-wedding-primary text-5xl font-semibold">Duy Hiệp</h2>
                         <div class="w-12 h-[1px] bg-wedding-gold/40 mx-auto md:mx-0"></div>
-                        <p class="text-gray-600 italic font-serif leading-relaxed text-lg pt-2">
+                        <p class="text-wedding-text italic font-serif leading-relaxed text-lg pt-2 font-medium">
                             "Người đàn ông điềm đạm, vững chãi và luôn coi gia đình là bến đỗ quan trọng nhất. Hiệp là bờ vai ấm áp, là người đồng hành đáng tin cậy để cùng Nguyệt đi qua mọi thăng trầm của cuộc sống."
                         </p>
                     </div>
@@ -319,11 +357,11 @@
                         </div>
                     </div>
                     <div class="md:col-span-7 text-center md:text-right space-y-3">
-                        <p class="text-[10px] uppercase tracking-[0.35em] text-wedding-gold font-sans font-bold">The Bride</p>
-                        <h2 class="font-script text-wedding-primary text-5xl">Minh Nguyệt</h2>
+                        <p class="text-[10px] uppercase tracking-[0.35em] text-wedding-gold font-sans font-extrabold">The Bride</p>
+                        <h2 class="font-script text-wedding-primary text-5xl font-semibold">Minh Nguyệt</h2>
                         <div class="w-12 h-[1px] bg-wedding-gold/40 mx-auto md:mr-0 md:ml-auto"></div>
-                        <p class="text-gray-600 italic font-serif leading-relaxed text-lg pt-2">
-                            "Một cô gái mang trong mình nét dịu dàng của nhành lan, chân thành trong từng suy nghĩ và luôn trân trọng những giá trị giản đơn. Với Nguyệt, hạnh phúc chính là cùng người mình thương vun đắp những khoảnh khắc bình yên nhất."
+                        <p class="text-wedding-text italic font-serif leading-relaxed text-lg pt-2 font-medium">
+                            "Một cô gái mang trong mình nét dịuàng của nhành lan, chân thành trong từng suy nghĩ và luôn trân trọng những giá trị giản đơn. Với Nguyệt, hạnh phúc chính là cùng người mình thương vun đắp những khoảnh khắc bình yên nhất."
                         </p>
                     </div>
                 </div>
@@ -334,12 +372,12 @@
         <section class="py-20 md:py-28 text-center bg-section-accent" data-aos="fade-up">
             <div class="px-6 max-w-2xl mx-auto space-y-6">
                 <span class="font-script text-wedding-gold text-7xl block leading-none">“</span>
-                <p class="text-2xl md:text-3xl text-wedding-primary italic leading-relaxed font-serif font-light">
+                <p class="text-2xl md:text-3xl text-wedding-primary italic leading-relaxed font-serif font-semibold">
                     Gặp gỡ là duyên phận, ở lại bên nhau là sự lựa chọn. Và chúng mình đã chọn để trở thành một phần không thể thiếu trong cuộc đời nhau.
                 </p>
                 <span class="font-script text-wedding-gold text-7xl block leading-none transform rotate-180 -mt-2">“</span>
                 <div class="w-12 h-[1px] bg-wedding-gold/40 mx-auto"></div>
-                <p class="font-script text-wedding-gold text-3xl pt-2">
+                <p class="font-script text-wedding-gold text-3xl pt-2 font-semibold">
                     — Duy Hiệp & Minh Nguyệt —
                 </p>
             </div>
@@ -348,19 +386,19 @@
         <!-- 5. LOVE STORY & ALBUM -->
         <section class="py-16 md:py-24 bg-white">
             <div class="max-w-3xl mx-auto px-4">
-                <h2 class="font-serif text-3xl md:text-4xl text-center text-wedding-primary mb-16 tracking-[0.25em] uppercase" data-aos="zoom-in">Our Love Story</h2>
+                <h2 class="font-serif text-3xl md:text-4xl text-center text-wedding-primary mb-16 tracking-[0.25em] uppercase font-bold" data-aos="zoom-in">Our Love Story</h2>
 
                 <div class="relative timeline-container pl-10 md:pl-0">
                     <!-- 2019 -->
                     <div class="flex flex-col md:flex-row items-start md:items-center mb-16 relative">
                         <div class="absolute -left-[29px] md:left-1/2 md:-translate-x-1/2 w-4 h-4 bg-wedding-gold rounded-full border-4 border-white z-10 shadow-sm" data-aos="zoom-in"></div>
                         <div class="w-full md:w-1/2 md:pr-12 text-left md:text-right" data-aos="fade-right">
-                            <h3 class="text-2xl font-sans text-wedding-primary font-bold mb-1">2019</h3>
+                            <h3 class="text-2xl font-sans text-wedding-primary font-extrabold mb-1">2019</h3>
                             <div class="inline-block p-1 bg-white border border-gray-100 shadow-sm rounded-sm mb-3 max-w-[240px]">
                                 <img src="assets/photo1.jpg" class="w-full h-auto object-contain rounded-sm" alt="Gặp gỡ 2019">
                             </div>
-                            <p class="text-wedding-gold-dark italic font-serif font-semibold text-lg">"Lần đầu ta gặp nhỏ..."</p>
-                            <p class="text-sm text-gray-500 mt-1 leading-relaxed">Ánh mắt ấy đã làm trái tim tôi lỡ nhịp ngay từ phút giây đầu tiên tại quán cà phê quen thuộc.</p>
+                            <p class="text-wedding-gold-dark italic font-serif font-bold text-lg">"Lần đầu ta gặp nhỏ..."</p>
+                            <p class="text-sm text-wedding-text mt-1 leading-relaxed font-medium">Ánh mắt ấy đã làm trái tim tôi lỡ nhịp ngay từ phút giây đầu tiên tại quán cà phê quen thuộc.</p>
                         </div>
                         <div class="hidden md:block md:w-1/2"></div>
                     </div>
@@ -369,12 +407,12 @@
                     <div class="flex flex-col md:flex-row-reverse items-start md:items-center mb-16 relative">
                         <div class="absolute -left-[29px] md:left-1/2 md:-translate-x-1/2 w-4 h-4 bg-wedding-gold rounded-full border-4 border-white z-10 shadow-sm" data-aos="zoom-in"></div>
                         <div class="w-full md:w-1/2 md:pl-12 text-left" data-aos="fade-left">
-                            <h3 class="text-2xl font-sans text-wedding-primary font-bold mb-1">2021</h3>
+                            <h3 class="text-2xl font-sans text-wedding-primary font-extrabold mb-1">2021</h3>
                             <div class="inline-block p-1 bg-white border border-gray-100 shadow-sm rounded-sm mb-3 max-w-[240px]">
                                 <img src="assets/photo2.jpg" class="w-full h-auto object-contain rounded-sm" alt="Yêu thương 2021">
                             </div>
-                            <p class="text-wedding-gold-dark italic font-serif font-semibold text-lg">Lời tỏ tình vụng về</p>
-                            <p class="text-sm text-gray-500 mt-1 leading-relaxed">Dưới cơn mưa phùn Hà Nội, chúng mình chính thức gọi nhau là "người yêu". Một hành trình mới bắt đầu.</p>
+                            <p class="text-wedding-gold-dark italic font-serif font-bold text-lg">Lời tỏ tình vụng về</p>
+                            <p class="text-sm text-wedding-text mt-1 leading-relaxed font-medium">Dưới cơn mưa phùn Hà Nội, chúng mình chính thức gọi nhau là "người yêu". Một hành trình mới bắt đầu.</p>
                         </div>
                         <div class="hidden md:block md:w-1/2"></div>
                     </div>
@@ -383,12 +421,12 @@
                     <div class="flex flex-col md:flex-row items-start md:items-center mb-16 relative">
                         <div class="absolute -left-[29px] md:left-1/2 md:-translate-x-1/2 w-4 h-4 bg-wedding-gold rounded-full border-4 border-white z-10 shadow-sm" data-aos="zoom-in"></div>
                         <div class="w-full md:w-1/2 md:pr-12 text-left md:text-right" data-aos="fade-right">
-                            <h3 class="text-2xl font-sans text-wedding-primary font-bold mb-1">2024</h3>
+                            <h3 class="text-2xl font-sans text-wedding-primary font-extrabold mb-1">2024</h3>
                             <div class="inline-block p-1 bg-white border border-gray-100 shadow-sm rounded-sm mb-3 max-w-[240px]">
                                 <img src="assets/photo3.jpg" class="w-full h-auto object-contain rounded-sm" alt="Cầu hôn 2024">
                             </div>
-                            <p class="text-wedding-gold-dark italic font-serif font-semibold text-lg">Will you marry me?</p>
-                            <p class="text-sm text-gray-500 mt-1 leading-relaxed">Chiếc nhẫn cầu hôn đã tìm thấy chủ nhân của nó. Một cái gật đầu nhẹ nhàng và những giọt nước mắt hạnh phúc.</p>
+                            <p class="text-wedding-gold-dark italic font-serif font-bold text-lg">Will you marry me?</p>
+                            <p class="text-sm text-wedding-text mt-1 leading-relaxed font-medium">Chiếc nhẫn cầu hôn đã tìm thấy chủ nhân của nó. Một cái gật đầu nhẹ nhàng và những giọt nước mắt hạnh phúc.</p>
                         </div>
                         <div class="hidden md:block md:w-1/2"></div>
                     </div>
@@ -397,12 +435,12 @@
                     <div class="flex flex-col md:flex-row-reverse items-start md:items-center relative">
                         <div class="absolute -left-[29px] md:left-1/2 md:-translate-x-1/2 w-4 h-4 bg-wedding-gold rounded-full border-4 border-white z-10 shadow-sm" data-aos="zoom-in"></div>
                         <div class="w-full md:w-1/2 md:pl-12 text-left" data-aos="fade-left">
-                            <h3 class="text-2xl font-sans text-wedding-primary font-bold mb-1">2026</h3>
+                            <h3 class="text-2xl font-sans text-wedding-primary font-extrabold mb-1">2026</h3>
                             <div class="inline-block p-1 bg-white border border-gray-100 shadow-sm rounded-sm mb-3 max-w-[240px]">
                                 <img src="assets/photo4.jpg" class="w-full h-auto object-contain rounded-sm" alt="Chung đôi 2026">
                             </div>
-                            <p class="text-wedding-gold-dark italic font-serif font-semibold text-lg">Mãi mãi một tình yêu</p>
-                            <p class="text-sm text-gray-400 mt-1 leading-relaxed">Cám ơn bạn đã xuất hiện để hoàn thiện mảnh ghép cuộc đời mình. Chào mừng ngày chung đôi!</p>
+                            <p class="text-wedding-gold-dark italic font-serif font-bold text-lg">Mãi mãi một tình yêu</p>
+                            <p class="text-sm text-wedding-text mt-1 leading-relaxed font-medium">Cám ơn bạn đã xuất hiện để hoàn thiện mảnh ghép cuộc đời mình. Chào mừng ngày chung đôi!</p>
                         </div>
                         <div class="hidden md:block md:w-1/2"></div>
                     </div>
@@ -412,7 +450,7 @@
 
         <!-- ALBUM 3D SLIDER -->
         <section class="py-16 bg-[#faf9f6] border-t border-b border-gray-100" data-aos="fade-up">
-            <h2 class="font-serif text-3xl md:text-4xl text-center text-wedding-primary mb-12 tracking-[0.25em] uppercase">Album Ảnh Cưới</h2>
+            <h2 class="font-serif text-3xl md:text-4xl text-center text-wedding-primary mb-12 tracking-[0.25em] uppercase font-bold">Album Ảnh Cưới</h2>
             
             <div class="swiper mySwiper max-w-3xl mx-auto px-6 relative">
                 <div class="swiper-wrapper">
@@ -427,13 +465,11 @@
                 <div class="swiper-button-next !text-wedding-gold !w-8 !h-8 after:!text-lg"></div>
                 <div class="swiper-button-prev !text-wedding-gold !w-8 !h-8 after:!text-lg"></div>
 
-                <!-- Dòng chỉ dẫn tương tác vi mô tinh tế -->
-                <p class="text-center text-xs font-sans text-gray-400 mt-6 italic tracking-wider flex items-center justify-center gap-1.5">
+                <p class="text-center text-xs font-sans text-gray-500 mt-6 italic tracking-wider flex items-center justify-center gap-1.5 font-semibold">
                     <span>👈</span> Vuốt sang hai bên để xem thêm ảnh <span>👉</span>
                 </p>
             </div>
 
-            <!-- BỐ CỤC LƯỚI 4 ẢNH DƯỚI ALBUM -->
             <div class="album-grid max-w-3xl mx-auto px-6 mt-12">
                 <div class="grid-item" data-aos="fade-up"><img src="assets/photo1.jpg" class="cursor-zoom-in" onclick="showFull(this.src)" alt="Ảnh cưới 1"></div>
                 <div class="grid-item" data-aos="fade-up" data-aos-delay="100"><img src="assets/photo2.jpg" class="cursor-zoom-in" onclick="showFull(this.src)" alt="Ảnh cưới 2"></div>
@@ -445,95 +481,93 @@
         <!-- 6. GIA ĐÌNH HAI BÊN & BÁO TIN LỄ THÀNH HÔN -->
         <section class="py-16 md:py-24 px-6 bg-white text-center">
             <div class="max-w-2xl mx-auto">
-                <h2 class="text-3xl md:text-4xl font-serif text-wedding-primary mb-12 tracking-[0.25em] uppercase" data-aos="fade-up">Gia đình hai bên</h2>
+                <h2 class="text-3xl md:text-4xl font-serif text-wedding-primary mb-12 tracking-[0.25em] uppercase font-bold" data-aos="fade-up">Gia đình hai bên</h2>
                 
                 <div class="flex justify-between items-start mb-12 text-sm md:text-base font-serif" data-aos="fade-up" data-aos-delay="100">
                     <div class="text-right flex-1 border-r border-wedding-gold/30 pr-6">
-                        <p class="text-wedding-gold-dark mb-2 italic text-lg">Nhà Trai</p>
-                        <p class="font-bold text-wedding-dark text-xl mb-1">Nguyễn Công Chứ</p>
-                        <p class="font-bold text-wedding-dark text-xl">Vũ Thị Hợp</p>
+                        <p class="text-wedding-gold-dark mb-2 italic text-lg font-bold">Nhà Trai</p>
+                        <p class="font-extrabold text-wedding-primary text-xl mb-1">Nguyễn Công Chứ</p>
+                        <p class="font-extrabold text-wedding-primary text-xl">Vũ Thị Hợp</p>
                     </div>
                     <div class="text-left flex-1 pl-6">
-                        <p class="text-wedding-gold-dark mb-2 italic text-lg">Nhà Gái</p>
-                        <p class="font-bold text-wedding-dark text-xl mb-1">Bùi Văn Thanh</p>
-                        <p class="font-bold text-wedding-dark text-xl">Trương Thị Hằng</p>
+                        <p class="text-wedding-gold-dark mb-2 italic text-lg font-bold">Nhà Gái</p>
+                        <p class="font-extrabold text-wedding-primary text-xl mb-1">Bùi Văn Thanh</p>
+                        <p class="font-extrabold text-wedding-primary text-xl">Trương Thị Hằng</p>
                     </div>
                 </div>
 
                 <div data-aos="zoom-in" class="my-10">
-                    <div class="h-[1px] bg-wedding-gold/20 w-1/2 mx-auto mb-4"></div>
-                    <p class="text-xs font-sans tracking-[0.3em] text-gray-400 uppercase">Trân trọng báo tin lễ thành hôn</p>
-                    <div class="h-[1px] bg-wedding-gold/20 w-1/2 mx-auto mt-4"></div>
+                    <div class="h-[1px] bg-wedding-gold/30 w-1/2 mx-auto mb-4"></div>
+                    <p class="text-xs font-sans tracking-[0.3em] text-gray-500 uppercase font-bold">Trân trọng báo tin lễ thành hôn</p>
+                    <div class="h-[1px] bg-wedding-gold/30 w-1/2 mx-auto mt-4"></div>
                 </div>
                 
                 <div data-aos="fade-up" class="mb-12">
-                    <p class="text-xs font-sans tracking-widest text-wedding-gold-dark mb-2 uppercase font-semibold">Trưởng Nam</p>
-                    <h3 class="text-5xl font-script text-wedding-primary mb-4">Nguyễn Duy Hiệp</h3>
+                    <p class="text-xs font-sans tracking-widest text-wedding-gold-dark mb-2 uppercase font-extrabold">Trưởng Nam</p>
+                    <h3 class="text-5xl font-script text-wedding-primary mb-4 font-semibold">Nguyễn Duy Hiệp</h3>
                     
-                    <div class="font-serif text-4xl text-wedding-gold italic my-4">&</div>
+                    <div class="font-serif text-4xl text-wedding-gold italic my-4 font-bold">&</div>
                     
-                    <h3 class="text-5xl font-script text-wedding-primary mb-2">Bùi Thị Nguyệt</h3>
-                    <p class="text-xs font-sans tracking-widest text-wedding-gold-dark mt-4 uppercase font-semibold">Út Nữ</p>
+                    <h3 class="text-5xl font-script text-wedding-primary mb-2 font-semibold">Bùi Thị Nguyệt</h3>
+                    <p class="text-xs font-sans tracking-widest text-wedding-gold-dark mt-4 uppercase font-extrabold">Út Nữ</p>
                 </div>
             </div>
         </section>
 
         <!-- 7. THỜI GIAN ĐẾM NGƯỢC -->
         <section class="py-12 bg-[#faf9f6] border-t border-b border-gray-100 text-center" data-aos="fade-up">
-            <h2 class="font-serif text-2xl text-wedding-primary mb-6 tracking-[0.2em] uppercase">Ngày Trọng Đại</h2>
-            <div id="countdown" class="text-lg font-medium flex justify-center gap-3 font-sans"></div>
+            <h2 class="font-serif text-2xl text-wedding-primary mb-6 tracking-[0.2em] uppercase font-bold">Ngày Trọng Đại</h2>
+            <div id="countdown" class="text-lg font-bold flex justify-center gap-3 font-sans"></div>
         </section>
 
-        <!-- 8. CHI TIẾT SỰ KIỆN & LỊCH TRÌNH -->
+        <!-- 8. CHI TIẾS SỰ KIỆN & LỊCH TRÌNH -->
         <section class="py-16 md:py-24 px-6 bg-white" data-aos="fade-up">
             <div class="max-w-2xl mx-auto space-y-16">
                 
                 <!-- CHI TIẾT ĐỊA ĐIỂM SỰ KIỆN (AQUARIA) -->
                 <div class="bg-white p-8 md:p-12 shadow-xl border border-wedding-gold/15 relative rounded-sm" data-aos="zoom-in">
-                    <!-- 4 hoạ tiết góc trang trí lộng lẫy -->
                     <div class="corner-bracket corner-tl border-t-2 border-l-2 top-3 left-3"></div>
                     <div class="corner-bracket border-t-2 border-r-2 top-3 right-3"></div>
                     <div class="corner-bracket border-b-2 border-l-2 bottom-3 left-3"></div>
                     <div class="corner-bracket corner-br border-b-2 border-r-2 bottom-3 right-3"></div>
 
                     <div class="text-center space-y-6 relative z-10 py-4">
-                        <p class="text-xs font-sans tracking-[0.25em] text-gray-500 uppercase">Sự kiện diễn ra tại</p>
+                        <p class="text-xs font-sans tracking-[0.25em] text-gray-500 uppercase font-bold">Sự kiện diễn ra tại</p>
                         
-                        <h3 class="font-serif text-wedding-primary text-3xl md:text-4xl font-semibold tracking-wider">NHÀ HÀNG AQUARIA</h3>
+                        <h3 class="font-serif text-wedding-primary text-3xl md:text-4xl font-extrabold tracking-wider">NHÀ HÀNG AQUARIA</h3>
                         
                         <div class="w-16 h-[1px] bg-wedding-gold/35 mx-auto"></div>
                         
-                        <p class="text-base text-gray-600 font-sans leading-relaxed">
+                        <p class="text-base text-wedding-text font-serif leading-relaxed font-semibold">
                             Cung Thể thao dưới nước, đường Lê Đức Thọ,<br>
                             P. Mỹ Đình 1, Q. Nam Từ Liêm, Hà Nội
                         </p>
 
                         <div class="w-full h-[1px] bg-wedding-gold/20 my-4"></div>
 
-                        <!-- Bố cục ngày tháng cổ điển đối xứng từ ảnh mẫu -->
                         <div class="grid grid-cols-3 items-center max-w-sm mx-auto">
                             <div class="text-right pr-4">
-                                <p class="text-xs font-sans text-gray-400 uppercase">Thứ Bảy</p>
-                                <p class="text-sm font-sans text-gray-600 font-semibold">Tháng 09</p>
+                                <p class="text-xs font-sans text-gray-500 uppercase font-bold">Thứ Bảy</p>
+                                <p class="text-sm font-sans text-wedding-text font-bold">Tháng 09</p>
                             </div>
                             <div class="text-center border-l border-r border-wedding-gold/30">
-                                <span class="font-serif text-5xl md:text-6xl text-wedding-gold leading-none font-medium">19</span>
+                                <span class="font-serif text-5xl md:text-6xl text-wedding-gold leading-none font-bold">19</span>
                             </div>
                             <div class="text-left pl-4">
-                                <p class="text-xs font-sans text-gray-400 uppercase">Năm 2026</p>
-                                <p class="text-sm font-sans text-gray-600 font-semibold">Lúc 11:00</p>
+                                <p class="text-xs font-sans text-gray-500 uppercase font-bold">Năm 2026</p>
+                                <p class="text-sm font-sans text-wedding-text font-bold">Lúc 11:00</p>
                             </div>
                         </div>
 
                         <div class="w-full h-[1px] bg-wedding-gold/20 my-4"></div>
 
-                        <p class="text-xs font-sans text-wedding-gold-dark font-medium tracking-wide">
+                        <p class="text-xs font-sans text-wedding-gold-dark font-extrabold tracking-wide">
                             (TỨC NGÀY 09/08 NĂM BÍNH NGỌ)
                         </p>
 
                         <div class="pt-4">
                             <a href="https://maps.app.goo.gl/piXAYV8XyqKXwBct7" target="_blank" 
-                               class="inline-block px-8 py-3 border border-wedding-primary text-wedding-primary rounded-full hover:bg-wedding-primary hover:text-white transition-all font-sans text-xs font-semibold uppercase tracking-widest">
+                               class="inline-block px-8 py-3 border-2 border-wedding-primary text-wedding-primary rounded-full hover:bg-wedding-primary hover:text-white transition-all font-sans text-xs font-extrabold uppercase tracking-widest">
                                 CHỈ ĐƯỜNG TRÊN MAP
                             </a>
                         </div>
@@ -542,57 +576,52 @@
 
                 <!-- LỊCH TRÌNH TIỆC CƯỚI -->
                 <div class="py-6" data-aos="fade-up">
-                    <h3 class="font-serif text-wedding-primary text-3xl text-center mb-12 tracking-[0.25em] uppercase">LỊCH TRÌNH</h3>
+                    <h3 class="font-serif text-wedding-primary text-3xl text-center mb-12 tracking-[0.25em] uppercase font-bold">LỊCH TRÌNH</h3>
                     
                     <div class="relative max-w-lg mx-auto pl-10 md:pl-16 space-y-12 before:content-[''] before:absolute before:left-3 before:top-2 before:bottom-2 before:w-[1px] before:bg-wedding-gold/30">
                         
-                        <!-- 10:30 -->
                         <div class="relative" data-aos="fade-up">
                             <div class="absolute -left-[32px] top-1.5 w-3.5 h-3.5 rounded-full bg-wedding-gold border-2 border-white shadow-sm"></div>
                             <div class="space-y-1">
-                                <p class="font-serif text-2xl text-wedding-gold-dark italic font-medium leading-none">10:30</p>
-                                <h4 class="font-sans text-wedding-primary font-bold text-base uppercase tracking-wider">Đón khách</h4>
-                                <p class="text-sm text-gray-500 font-serif">Gia đình hân hạnh đón tiếp quý khách tại sảnh nhà hàng.</p>
+                                <p class="font-serif text-2xl text-wedding-gold-dark italic font-bold leading-none">10:30</p>
+                                <h4 class="font-sans text-wedding-primary font-extrabold text-base uppercase tracking-wider">Đón khách</h4>
+                                <p class="text-sm text-wedding-text font-serif font-medium">Gia đình hân hạnh đón tiếp quý khách tại sảnh nhà hàng.</p>
                             </div>
                         </div>
 
-                        <!-- 11:00 -->
                         <div class="relative" data-aos="fade-up" data-aos-delay="100">
                             <div class="absolute -left-[32px] top-1.5 w-3.5 h-3.5 rounded-full bg-wedding-gold border-2 border-white shadow-sm"></div>
                             <div class="space-y-1">
-                                <p class="font-serif text-2xl text-wedding-gold-dark italic font-medium leading-none">11:00</p>
-                                <h4 class="font-sans text-wedding-primary font-bold text-base uppercase tracking-wider">Lễ thành hôn & Khai tiệc</h4>
-                                <p class="text-sm text-gray-500 font-serif">Cùng chứng kiến khoảnh khắc thiêng liêng nhất.</p>
+                                <p class="font-serif text-2xl text-wedding-gold-dark italic font-bold leading-none">11:00</p>
+                                <h4 class="font-sans text-wedding-primary font-extrabold text-base uppercase tracking-wider">Lễ thành hôn & Khai tiệc</h4>
+                                <p class="text-sm text-wedding-text font-serif font-medium">Cùng chứng kiến khoảnh khắc thiêng liêng nhất.</p>
                             </div>
                         </div>
 
-                        <!-- 11:30 -->
                         <div class="relative" data-aos="fade-up" data-aos-delay="200">
                             <div class="absolute -left-[32px] top-1.5 w-3.5 h-3.5 rounded-full bg-wedding-gold border-2 border-white shadow-sm"></div>
                             <div class="space-y-1">
-                                <p class="font-serif text-2xl text-wedding-gold-dark italic font-medium leading-none">11:30</p>
-                                <h4 class="font-sans text-wedding-primary font-bold text-base uppercase tracking-wider">Rót rượu, cắt bánh</h4>
-                                <p class="text-sm text-gray-500 font-serif">Nâng ly chúc mừng hạnh phúc đôi uyên ương.</p>
+                                <p class="font-serif text-2xl text-wedding-gold-dark italic font-bold leading-none">11:30</p>
+                                <h4 class="font-sans text-wedding-primary font-extrabold text-base uppercase tracking-wider">Rót rượu, cắt bánh</h4>
+                                <p class="text-sm text-wedding-text font-serif font-medium">Nâng ly chúc mừng hạnh phúc đôi uyên ương.</p>
                             </div>
                         </div>
 
-                        <!-- 12:00 -->
                         <div class="relative" data-aos="fade-up" data-aos-delay="300">
                             <div class="absolute -left-[32px] top-1.5 w-3.5 h-3.5 rounded-full bg-wedding-gold border-2 border-white shadow-sm"></div>
                             <div class="space-y-1">
-                                <p class="font-serif text-2xl text-wedding-gold-dark italic font-medium leading-none">12:00</p>
-                                <h4 class="font-sans text-wedding-primary font-bold text-base uppercase tracking-wider">Phục vụ món chính</h4>
-                                <p class="text-sm text-gray-500 font-serif">Thưởng thức ẩm thực đặc sắc từ bếp trưởng nhà hàng.</p>
+                                <p class="font-serif text-2xl text-wedding-gold-dark italic font-bold leading-none">12:00</p>
+                                <h4 class="font-sans text-wedding-primary font-extrabold text-base uppercase tracking-wider">Phục vụ món chính</h4>
+                                <p class="text-sm text-wedding-text font-serif font-medium">Thưởng thức ẩm thực đặc sắc từ bếp trưởng nhà hàng.</p>
                             </div>
                         </div>
 
-                        <!-- 13:30 -->
                         <div class="relative" data-aos="fade-up" data-aos-delay="400">
                             <div class="absolute -left-[32px] top-1.5 w-3.5 h-3.5 rounded-full bg-wedding-gold border-2 border-white shadow-sm"></div>
                             <div class="space-y-1">
-                                <p class="font-serif text-2xl text-wedding-gold-dark italic font-medium leading-none">13:30</p>
-                                <h4 class="font-sans text-wedding-primary font-bold text-base uppercase tracking-wider">Kết thúc tiệc</h4>
-                                <p class="text-sm text-gray-500 font-serif">Cảm ơn quý khách đã đến chung vui cùng gia đình.</p>
+                                <p class="font-serif text-2xl text-wedding-gold-dark italic font-bold leading-none">13:30</p>
+                                <h4 class="font-sans text-wedding-primary font-extrabold text-base uppercase tracking-wider">Kết thúc tiệc</h4>
+                                <p class="text-sm text-wedding-text font-serif font-medium">Cảm ơn quý khách đã đến chung vui cùng gia đình.</p>
                             </div>
                         </div>
                     </div>
@@ -605,9 +634,9 @@
             <div class="max-w-2xl mx-auto text-center border border-wedding-gold/20 rounded-lg bg-white p-8 md:p-14 shadow-sm relative">
                 <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-white px-4 text-wedding-gold text-lg">❤</div>
                 
-                <h2 class="font-serif text-3xl text-wedding-primary mb-8 tracking-[0.2em] uppercase">Lời Tri Ân Cha Mẹ</h2>
+                <h2 class="font-serif text-3xl text-wedding-primary mb-8 tracking-[0.2em] uppercase font-bold">Lời Tri Ân Cha Mẹ</h2>
                 
-                <div class="font-serif text-lg text-gray-600 space-y-4 leading-relaxed italic">
+                <div class="font-serif text-lg text-wedding-text space-y-4 leading-relaxed italic font-medium">
                     <p>
                         "Chúng con tin rằng, hạnh phúc ngày hôm nay không chỉ được xây dệt từ tình yêu của hai đứa, mà còn được vun đắp bởi tình thương bao la và sự hy sinh thầm lặng của cha mẹ."
                     </p>
@@ -626,15 +655,15 @@
             <div class="max-w-2xl mx-auto space-y-16">
                 <!-- FORM ĐĂNG KÝ -->
                 <div class="border border-wedding-gold/20 rounded-lg p-8 md:p-12 shadow-sm bg-[#faf9f6]" data-aos="fade-up">
-                    <h2 class="font-serif text-3xl text-wedding-primary text-center mb-2 tracking-[0.2em] uppercase">Xác Nhận Tham Dự</h2>
-                    <p class="text-center font-sans text-xs text-gray-400 tracking-[0.15em] mb-8 uppercase font-medium">Kính mong quý khách phản hồi trước ngày cưới</p>
+                    <h2 class="font-serif text-3xl text-wedding-primary text-center mb-2 tracking-[0.2em] uppercase font-bold">Xác Nhận Tham Dự</h2>
+                    <p class="text-center font-sans text-xs text-gray-700 tracking-[0.15em] mb-8 uppercase font-bold">Kính mong quý khách phản hồi trước ngày cưới</p>
                     
                     <form id="rsvp-form" class="space-y-4 font-sans text-sm">
                         <input type="text" id="guest-name" placeholder="Họ và tên của bạn*" required 
-                               class="w-full p-4 border border-gray-200 rounded-sm bg-white focus:outline-none focus:border-wedding-gold transition">
+                               class="w-full p-4 border border-gray-300 rounded-sm bg-white focus:outline-none focus:border-wedding-gold font-semibold text-wedding-text transition">
                         
                         <select id="attendance" required 
-                                class="w-full p-4 border border-gray-200 rounded-sm bg-white focus:outline-none focus:border-wedding-gold transition cursor-pointer">
+                                class="w-full p-4 border border-gray-300 rounded-sm bg-white focus:outline-none focus:border-wedding-gold font-semibold text-wedding-text transition cursor-pointer">
                             <option value="">Bạn sẽ tham dự chứ?*</option>
                             <option value="Có">Có, mình chắc chắn sẽ đến</option>
                             <option value="Không">Tiếc quá, mình bận mất rồi</option>
@@ -642,38 +671,38 @@
                         
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <select id="location" 
-                                    class="w-full p-4 border border-gray-200 rounded-sm bg-white focus:outline-none focus:border-wedding-gold transition cursor-pointer">
-                                <option value="Nhà Gái">Nhà Gái (12/09)</option>
+                                    class="w-full p-4 border border-gray-300 rounded-sm bg-white focus:outline-none focus:border-wedding-gold font-semibold text-wedding-text transition cursor-pointer">
                                 <option value="Nhà Trai">Nhà Trai (19/09)</option>
+                                <option value="Đón Dâu">Đón Dâu (12/09)</option>
                             </select>
                             
                             <select id="guest-count" 
-                                    class="w-full p-4 border border-gray-200 rounded-sm bg-white focus:outline-none focus:border-wedding-gold transition cursor-pointer">
+                                    class="w-full p-4 border border-gray-300 rounded-sm bg-white focus:outline-none focus:border-wedding-gold font-semibold text-wedding-text transition cursor-pointer">
                                 <option value="1">Đi 1 người</option>
                                 <option value="2">Đi 2 người</option>
                             </select>
                         </div>
                         
                         <textarea id="guest-message" rows="4" placeholder="Lời chúc ý nghĩa gửi dâu rể...*" required
-                                  class="w-full p-4 border border-gray-200 rounded-sm bg-white focus:outline-none focus:border-wedding-gold transition resize-none"></textarea>
+                                  class="w-full p-4 border border-gray-300 rounded-sm bg-white focus:outline-none focus:border-wedding-gold font-semibold text-wedding-text transition resize-none"></textarea>
                         
                         <!-- TRỢ LÝ AI GEMINI -->
                         <div class="flex flex-col sm:flex-row justify-between items-center gap-4 border-t border-wedding-gold/10 pt-6">
                             <div class="flex items-center gap-1.5 w-full sm:w-auto bg-wedding-bg p-1.5 rounded-sm border border-wedding-gold/15">
-                                <select id="ai-style" class="p-2 border-none bg-transparent text-wedding-primary font-sans text-xs font-semibold focus:outline-none cursor-pointer">
+                                <select id="ai-style" class="p-2 border-none bg-transparent text-wedding-primary font-sans text-xs font-extrabold focus:outline-none cursor-pointer">
                                     <option value="chân thành và cảm động">Chân thành</option>
                                     <option value="hài hước, lầy lội">Hài hước</option>
                                     <option value="ngôn tình, lãng mạn">Ngôn tình</option>
                                     <option value="thơ lục bát (2 đến 4 câu)">Thơ lục bát</option>
                                 </select>
                                 <button type="button" id="btn-ai-wish" onclick="generateAIWish()"
-                                        class="bg-gradient-to-r from-wedding-gold to-wedding-gold-dark hover:from-wedding-gold-dark hover:to-wedding-gold text-white px-4 py-2 rounded-sm font-sans text-xs font-bold transition-all shadow-sm flex items-center justify-center gap-1 min-w-[130px] uppercase tracking-wider">
+                                        class="bg-gradient-to-r from-wedding-gold to-wedding-gold-dark hover:from-wedding-gold-dark hover:to-wedding-gold text-white px-4 py-2 rounded-sm font-sans text-xs font-extrabold transition-all shadow-sm flex items-center justify-center gap-1 min-w-[130px] uppercase tracking-wider">
                                     <span>✨ Nhờ AI viết</span>
                                 </button>
                             </div>
 
                             <button type="submit" id="rsvp-btn" 
-                                    class="w-full sm:w-auto bg-wedding-primary hover:bg-wedding-dark text-white px-8 py-3.5 rounded-sm font-sans font-semibold tracking-widest text-xs transition-all shadow-md hover:shadow-lg h-11 uppercase">
+                                    class="w-full sm:w-auto bg-wedding-primary hover:bg-wedding-dark text-white px-8 py-3.5 rounded-sm font-sans font-extrabold tracking-widest text-xs transition-all shadow-md hover:shadow-lg h-11 uppercase">
                                 GỬI XÁC NHẬN
                             </button>
                         </div>
@@ -683,7 +712,7 @@
 
                 <!-- SỔ LƯU BÚT REALTIME PHÂN TRANG -->
                 <div class="space-y-8" data-aos="fade-up">
-                    <h3 class="text-3xl font-serif text-center text-wedding-primary tracking-[0.2em] uppercase">Sổ Lưu Bút</h3>
+                    <h3 class="text-3xl font-serif text-center text-wedding-primary tracking-[0.2em] uppercase font-bold">Sổ Lưu Bút</h3>
                     
                     <div id="guestbook-list" class="space-y-4 max-h-[550px] overflow-y-auto custom-scrollbar pr-2 relative pb-4">
                         <div id="gb-loading" class="absolute inset-0 bg-white/80 z-10 flex justify-center pt-10 hidden backdrop-blur-sm">
@@ -695,14 +724,14 @@
                     </div>
 
                     <!-- THANH PHÂN TRANG GIAO DIỆN MỚI -->
-                    <div class="flex justify-between items-center font-sans text-xs font-bold uppercase tracking-wider border-t border-wedding-gold/20 pt-6">
+                    <div class="flex justify-between items-center font-sans text-xs font-extrabold uppercase tracking-wider border-t border-wedding-gold/20 pt-6">
                         <button id="btn-prev" onclick="changePage(-1)" disabled
-                                class="px-4 py-2 border border-wedding-gold/20 text-gray-400 hover:border-wedding-primary hover:text-wedding-primary rounded-sm transition disabled:opacity-30 disabled:pointer-events-none">
+                                class="px-4 py-2 border-2 border-wedding-gold/25 text-gray-500 hover:border-wedding-primary hover:text-wedding-primary rounded-sm transition disabled:opacity-30 disabled:pointer-events-none">
                             ◀ Trang Trước
                         </button>
-                        <span id="page-indicator" class="text-wedding-primary text-sm tracking-widest">Trang 1 / 1</span>
+                        <span id="page-indicator" class="text-wedding-primary text-sm tracking-widest font-extrabold">Trang 1 / 1</span>
                         <button id="btn-next" onclick="changePage(1)" disabled
-                                class="px-4 py-2 border border-wedding-gold/20 text-gray-400 hover:border-wedding-primary hover:text-wedding-primary rounded-sm transition disabled:opacity-30 disabled:pointer-events-none">
+                                class="px-4 py-2 border-2 border-wedding-gold/25 text-gray-500 hover:border-wedding-primary hover:text-wedding-primary rounded-sm transition disabled:opacity-30 disabled:pointer-events-none">
                             Trang Sau ▶
                         </button>
                     </div>
@@ -712,28 +741,41 @@
 
         <!-- 11. HỘP MỪNG CƯỚI -->
         <section class="py-16 text-center bg-section-accent border-t border-gray-100" data-aos="zoom-in">
-            <h3 class="text-2xl font-serif text-wedding-primary mb-8 tracking-[0.25em] uppercase font-semibold">Mừng Cưới</h3>
-            <button id="btn-open-gift" onclick="toggleGiftModal(true)"
-                    class="bg-wedding-primary hover:bg-wedding-dark text-white w-28 h-36 rounded-sm shadow-xl border-4 border-wedding-gold/60 relative transition-transform transform hover:-translate-y-2 flex flex-col items-center justify-center mx-auto group">
-                <div class="w-12 h-12 border border-wedding-gold rounded-full flex items-center justify-center mb-2 group-hover:rotate-12 transition duration-300">
-                    <span class="text-wedding-gold text-2xl font-bold">囍</span>
-                </div>
-                <div class="absolute -bottom-10 text-[10px] text-gray-400 font-sans font-bold tracking-[0.2em] w-full text-center whitespace-nowrap uppercase">Nhấn để mở</div>
-            </button>
+            <h3 class="text-2xl font-serif text-wedding-primary mb-12 tracking-[0.25em] uppercase font-bold">Mừng Cưới</h3>
+            
+            <!-- Wrapper chứa Hộp & các đồng xu trôi nổi xung quanh -->
+            <div class="relative inline-block mx-auto z-10">
+                <!-- Các đồng xu vàng trôi nổi xung quanh hộp -->
+                <div class="gold-coin w-6 h-6" style="top: -20px; left: -25px; animation-delay: 0s; animation-duration: 3.5s;">🪙</div>
+                <div class="gold-coin w-5 h-5" style="top: 40px; right: -30px; animation-delay: 0.8s; animation-duration: 4.2s;">🪙</div>
+                <div class="gold-coin w-7 h-7" style="bottom: -15px; left: -35px; animation-delay: 1.5s; animation-duration: 3.8s;">🪙</div>
+                <div class="gold-coin w-6 h-6" style="top: -25px; right: 10px; animation-delay: 2.2s; animation-duration: 4.8s;">🪙</div>
+
+                <!-- Nút Hộp Mừng Cưới với hiệu ứng lắc lư wobble-box-anim liên tục và viền chỉ vàng nhạt -->
+                <button id="btn-open-gift" onclick="toggleGiftModal(true)"
+                        class="bg-red-700 hover:bg-red-800 text-white w-28 h-36 rounded-sm shadow-2xl border-4 border-wedding-gold relative transition-all transform hover:-translate-y-2 flex flex-col items-center justify-center wobble-box-anim group z-30">
+                    <div class="w-12 h-12 border-2 border-wedding-gold rounded-full flex items-center justify-center mb-2 group-hover:rotate-12 transition duration-300 bg-red-900/20">
+                        <span class="text-wedding-gold text-2xl font-bold">囍</span>
+                    </div>
+                </button>
+                
+                <!-- Nhãn hướng dẫn tinh gọn phía dưới -->
+                <div class="absolute -bottom-10 text-[10px] text-wedding-primary font-sans font-extrabold tracking-[0.2em] w-full text-center whitespace-nowrap uppercase">Nhấn để mở</div>
+            </div>
         </section>
 
         <!-- 12. PHẦN CHÂN TRANG & LỜI CẢM ƠN -->
         <footer class="py-12 text-center bg-wedding-dark text-white relative">
-            <h2 class="font-script text-wedding-gold text-4xl">Lời Cảm Ơn</h2>
-            <p class="text-gray-400 mt-2 font-sans text-xs tracking-[0.15em] uppercase">Hẹn gặp bạn trong ngày vui của chúng mình!</p>
-            <p class="text-wedding-gold-dark/40 text-[9px] font-sans mt-8 uppercase tracking-widest">© 2026 Duy Hiệp & Minh Nguyệt Wedding Website</p>
+            <h2 class="font-script text-wedding-gold text-4xl font-semibold">Lời Cảm Ơn</h2>
+            <p class="text-gray-400 mt-2 font-sans text-xs tracking-[0.15em] uppercase font-semibold">Hẹn gặp bạn trong ngày vui của chúng mình!</p>
+            <p class="text-wedding-gold-dark/40 text-[9px] font-sans mt-8 uppercase tracking-widest font-bold">© 2026 Duy Hiệp & Minh Nguyệt Wedding Website</p>
         </footer>
     </div>
 
     <!-- NÚT RSVP NỔI NHANH TRÊN DI ĐỘNG -->
     <div id="sticky-rsvp-container" class="fixed right-6 bottom-6 z-50 transition-all duration-500 transform translate-y-24 opacity-0 scale-90">
         <button onclick="scrollToRSVP()" 
-                class="bg-wedding-primary hover:bg-wedding-dark text-wedding-gold border border-wedding-gold/30 px-5 py-3.5 rounded-full font-sans text-xs font-semibold uppercase tracking-[0.2em] shadow-2xl flex items-center gap-2 hover:scale-105 transition active:scale-95">
+                class="bg-wedding-primary hover:bg-wedding-dark text-wedding-gold border border-wedding-gold/30 px-5 py-3.5 rounded-full font-sans text-xs font-extrabold uppercase tracking-[0.2em] shadow-2xl flex items-center gap-2 hover:scale-105 transition active:scale-95">
             <span>💌</span> Xác nhận tham dự
         </button>
     </div>
@@ -743,7 +785,7 @@
         <div class="bg-wedding-light w-full max-w-4xl rounded-sm overflow-hidden relative transform scale-95 transition-transform duration-300 shadow-2xl" id="gift-modal-content">
             
             <div class="bg-wedding-primary text-white text-center py-6 relative">
-                <h2 class="text-2xl font-serif tracking-[0.2em] uppercase text-wedding-gold">Hộp Mừng Cưới</h2>
+                <h2 class="text-2xl font-serif tracking-[0.2em] uppercase text-wedding-gold font-bold">Hộp Mừng Cưới</h2>
                 <button onclick="toggleGiftModal(false)" class="absolute right-4 top-1/2 -translate-y-1/2 text-white hover:text-wedding-gold transition p-2">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12" /></svg>
                 </button>
@@ -755,25 +797,25 @@
                 <!-- Chú rể -->
                 <div class="bg-white p-6 text-center flex-1 border border-gray-100 shadow-lg relative group">
                     <div class="absolute inset-2 border border-wedding-gold/15 pointer-events-none"></div>
-                    <h3 class="font-serif text-wedding-primary mb-4 text-xl italic font-medium">Chú Rể</h3>
+                    <h3 class="font-serif text-wedding-primary mb-4 text-xl italic font-bold">Chú Rể</h3>
                     <div class="bg-white p-2 inline-block border border-gray-100 mb-4 shadow-sm">
                         <!-- Đồng bộ VietQR Chú rể -->
                         <img src="https://img.vietqr.io/image/mbbank-9906121997-compact.jpg?accountName=NGUYEN%20DUY%20HIEP&addInfo=Mung%20cuoi%20Duy%20Hiep%20Minh%20Nguyet" alt="QR Duy Hiệp" class="w-40 h-40 md:w-48 md:h-48 mx-auto">
                     </div>
                     <p class="font-serif font-bold text-gray-800 text-xl mb-1">Nguyễn Duy Hiệp</p>
-                    <p class="font-sans text-gray-400 text-[10px] tracking-widest uppercase">MBBank • 9906121997</p>
+                    <p class="font-sans text-gray-500 text-[10px] tracking-widest uppercase font-bold">MBBank • 9906121997</p>
                 </div>
                 
                 <!-- Cô dâu -->
                 <div class="bg-white p-6 text-center flex-1 border border-gray-100 shadow-lg relative group">
                     <div class="absolute inset-2 border border-wedding-gold/15 pointer-events-none"></div>
-                    <h3 class="font-serif text-wedding-primary mb-4 text-xl italic font-medium">Cô Dâu</h3>
+                    <h3 class="font-serif text-wedding-primary mb-4 text-xl italic font-bold">Cô Dâu</h3>
                     <div class="bg-white p-2 inline-block border border-gray-100 mb-4 shadow-sm">
                         <!-- Đồng bộ VietQR Cô dâu -->
                         <img src="https://img.vietqr.io/image/tpbank-0333988184-compact.jpg?accountName=BUI%20THI%20NGUYET&addInfo=Mung%20cuoi%20Duy%20Hiep%20Minh%20Nguyet" alt="QR Minh Nguyệt" class="w-40 h-40 md:w-48 md:h-48 mx-auto">
                     </div>
                     <p class="font-serif font-bold text-gray-800 text-xl mb-1">Bùi Thị Nguyệt</p>
-                    <p class="font-sans text-gray-400 text-[10px] tracking-widest uppercase">TPBank • 0333988184</p>
+                    <p class="font-sans text-gray-500 text-[10px] tracking-widest uppercase font-bold">TPBank • 0333988184</p>
                 </div>
             </div>
         </div>
@@ -782,13 +824,13 @@
     <!-- JAVASCRIPT ĐỒNG BỘ TOÀN DIỆN -->
     <script>
         // API dập hỷ và lưu bút đồng bộ (Đã cập nhật SCRIPT_URL chính xác của Mr. Hiệp)
-        const apiEndpoint = "https://script.google.com/macros/s/AKfycbxYgkVYK-RrciVIbU_bEF9PKlxlQ48CfMn3dpmOu_ccy-tzWPQKopgys0ztUMJmW1Tr/exec";
+        const apiEndpoint = "https://script.google.com/macros/s/AKfycbxb8c_blK-q3IK9ZP6-14x7g-w9wggQdDLdS9j4k60J-_LCf96sH1I2UmXbbQQYN-PP/exec";
         let localWishes = [];
         let currentPage = 1;
         const itemsPerPage = 5;
         let isOpened = false; // Guard chống kích hoạt đúp
 
-        // SỬA LỖI 1: Tối ưu hóa chuyển cảnh "MỞ THIỆP" mượt mà, khóa cuộn và tránh giật AOS
+        // Tối ưu hóa chuyển cảnh "MỞ THIỆP" mượt mà, khóa cuộn và tránh giật AOS
         function openInvite() {
             if (isOpened) return; 
             isOpened = true;
@@ -797,10 +839,10 @@
             const music = document.getElementById("music");
 
             // Kích hoạt âm nhạc dập dìu dâng trào cảm xúc tức thì
-            music.play().catch(() => {});
+            music.play().catch(function() {});
 
             // Hiệu ứng Dolly Zoom-In phóng to nhẹ kết hợp mờ dần (mượt hơn scale-95 trên Safari)
-            splash.classList.add("scale-105", "opacity-0", "pointer-events-none");
+            if (splash) splash.classList.add("scale-105", "opacity-0", "pointer-events-none");
 
             // Cuộn mượt về đầu trang ngay lập tức trước khi gỡ khóa body để bảo toàn khung tọa độ
             window.scrollTo({ top: 0 });
@@ -834,14 +876,15 @@
             fetchWishes();
 
             // Xóa triệt để khỏi luồng hiển thị của DOM sau khi hoàn thành transition
-            setTimeout(() => { 
-                splash.style.display = "none"; 
+            setTimeout(function() { 
+                if (splash) splash.style.display = "none"; 
             }, 1000);
         }
 
         // Bật/Tắt modal quà cưới
         function toggleGiftModal(isOpen) {
             const modal = document.getElementById("gift-modal");
+            if (!modal) return;
             if (isOpen) {
                 modal.classList.add("active");
             } else {
@@ -851,13 +894,15 @@
 
         // Cuộn mượt đến RSVP
         function scrollToRSVP() {
-            document.getElementById("rsvp-section").scrollIntoView({ behavior: 'smooth' });
+            const rsvpSec = document.getElementById("rsvp-section");
+            if (rsvpSec) rsvpSec.scrollIntoView({ behavior: 'smooth' });
         }
 
         // Trạng thái nút RSVP nổi di động
         function setupStickyRSVP() {
             const stickyBtn = document.getElementById("sticky-rsvp-container");
-            window.addEventListener("scroll", () => {
+            if (!stickyBtn) return;
+            window.addEventListener("scroll", function() {
                 if (window.scrollY > 400) {
                     stickyBtn.classList.remove("translate-y-24", "opacity-0", "scale-90");
                     stickyBtn.classList.add("translate-y-0", "opacity-100", "scale-100");
@@ -868,58 +913,93 @@
             });
         }
 
-        // SỬA LỖI 2: Đồng bộ hóa 2 chiều Lưu Bút thời gian thực với Google Docs/Sheets
+        // TÁCH HÀM XỬ LÝ DỮ LIỆU ĐỂ DÙNG CHUNG CHO CẢ KHỞI CHẠY TRỰC TIẾP VÀ CHẠY QUA PROXY
+        function handleWishData(data) {
+            let wishes = [];
+            // Phân tích dữ liệu đa cấu trúc linh hoạt từ Google Web App
+            if (Array.isArray(data)) {
+                wishes = data;
+            } else if (data && Array.isArray(data.data)) {
+                wishes = data.data;
+            } else if (data && typeof data === 'object') {
+                const keys = Object.keys(data);
+                for (let i = 0; i < keys.length; i++) {
+                    if (Array.isArray(data[keys[i]])) {
+                        wishes = data[keys[i]];
+                        break;
+                    }
+                }
+            }
+
+            // Ánh xạ các cột: time, name, message sang cấu trúc nạp cục bộ
+            localWishes = wishes
+                .filter(function(w) {
+                    return (w.name || w.Name) && (w.message || w.Message);
+                })
+                .map(function(w) {
+                    return {
+                        name: w.name || w.Name || "Khách mời",
+                        message: w.message || w.Message || "",
+                        timestamp: w.timestamp || w.Timestamp || w.time || w.Time || new Date().toISOString()
+                    };
+                });
+            
+            // Sắp xếp thời gian thực giảm dần
+            localWishes.sort(function(a, b) {
+                return new Date(b.timestamp) - new Date(a.timestamp);
+            });
+            
+            renderWishes();
+        }
+
+        // NẠP DỮ LIỆU DỰ PHÒNG CAO CẤP KHI TOÀN BỘ KẾT NỐI SHEETS BỊ TỊT NGÒI
+        function useFallbackWishes() {
+            localWishes = [
+                { name: "Anh Minh & Chị Trang", message: "Chúc hai em Duy Hiệp và Minh Nguyệt trăm năm hạnh phúc, một hành trình mới đầy ắp tiếng cười và niềm vui hạnh phúc viên mãn!", timestamp: "08:12 08/06/2026" },
+                { name: "Bạn thân Đại học", message: "Chúc mừng ngày hỷ sự của Duy Hiệp và Minh Nguyệt! Chúc chú rể luôn vững chãi, chúc cô dâu luôn rạng rỡ xinh tươi.", timestamp: "23:45 07/06/2026" }
+            ];
+            renderWishes();
+        }
+
+        // ĐỒNG BỘ 2 CHIỀU LƯU BÚT THỜI GIAN THỰC (Tích hợp cơ chế tự động chuyển cổng CORS Proxy dự phòng Allorigins)
         function fetchWishes() {
             const loader = document.getElementById("gb-loading");
             if (loader) loader.classList.remove("hidden");
 
+            // Thử kết nối trực tiếp đến Web App Apps Script của anh trước
             fetch(apiEndpoint)
-                .then(res => {
+                .then(function(res) {
                     if (!res.ok) throw new Error("HTTP Error " + res.status);
                     return res.json();
                 })
-                .then(data => {
-                    // Phân tích dữ liệu trả về từ Google Web App đa cấu trúc linh hoạt
-                    let wishes = [];
-                    if (Array.isArray(data)) {
-                        wishes = data;
-                    } else if (data && Array.isArray(data.data)) {
-                        wishes = data.data;
-                    } else if (data && typeof data === 'object') {
-                        // Tìm mảng lồng nhau nếu có
-                        const keys = Object.keys(data);
-                        for (let key of keys) {
-                            if (Array.isArray(data[key])) {
-                                wishes = data[key];
-                                break;
-                            }
-                        }
-                    }
-
-                    // Chuẩn hóa cấu trúc và sắp xếp theo mốc thời gian thực mới nhất lên đầu
-                    localWishes = wishes
-                        .filter(w => (w.name || w.Name) && (w.message || w.Message))
-                        .map(w => ({
-                            name: w.name || w.Name || "Khách mời",
-                            message: w.message || w.Message || "",
-                            timestamp: w.timestamp || w.Timestamp || w.date || w.Date || new Date().toISOString()
-                        }));
-
-                    // Sắp xếp thời gian thực giảm dần
-                    localWishes.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+                .then(function(data) {
+                    // Nếu kết nối trực tiếp thành công, xử lý đổ dữ liệu ngay
+                    handleWishData(data);
+                })
+                .catch(function(err) {
+                    // Nếu kết nối trực tiếp thất bại do chính sách bảo mật CORS hoặc Sandbox của iframe
+                    console.warn("Direct fetch failed due to CORS/Sandbox. Attempting CORS Proxy fallback...", err);
                     
-                    renderWishes();
+                    // Sử dụng Allorigins CORS Proxy để chuyển hướng bảo mật, gỡ bỏ thuộc tính chặn redirect
+                    const proxyUrl = "https://api.allorigins.win/get?url=" + encodeURIComponent(apiEndpoint) + "&_nocache=" + Date.now();
+                    
+                    fetch(proxyUrl)
+                        .then(function(proxyRes) {
+                            if (!proxyRes.ok) throw new Error("Proxy Error " + proxyRes.status);
+                            return proxyRes.json();
+                        })
+                        .then(function(proxyData) {
+                            // Allorigins bọc nội dung mộc dạng JSON String trong trường 'contents'
+                            const data = JSON.parse(proxyData.contents);
+                            handleWishData(data);
+                        })
+                        .catch(function(proxyErr) {
+                            console.error("Cả kết nối trực tiếp và Proxy dự phòng đều thất bại:", proxyErr);
+                            // Kích hoạt dữ liệu mẫu để giao diện không bị trống
+                            useFallbackWishes();
+                        });
                 })
-                .catch(err => {
-                    console.error("Lỗi kết nối hoặc phân tích Google Sheet API:", err);
-                    // Danh sách dự phòng cao cấp tự động
-                    localWishes = [
-                        { name: "Anh Minh & Chị Trang", message: "Chúc hai em Duy Hiệp và Minh Nguyệt trăm năm hạnh phúc, một hành trình mới đầy ắp tiếng cười và niềm vui hạnh phúc viên mãn!", timestamp: new Date(Date.now() - 3600000).toISOString() },
-                        { name: "Bạn thân Đại học", message: "Chúc mừng ngày hỷ sự của Duy Hiệp và Minh Nguyệt! Chúc chú rể luôn vững chãi, chúc cô dâu luôn rạng rỡ xinh tươi.", timestamp: new Date(Date.now() - 7200000).toISOString() }
-                    ];
-                    renderWishes();
-                })
-                .finally(() => {
+                .finally(function() {
                     if (loader) loader.classList.add("hidden");
                 });
         }
@@ -929,21 +1009,29 @@
             return name.trim().split(" ").pop().charAt(0).toUpperCase();
         }
 
-        // Chuyển đổi định dạng thời gian thực (Relative Time)
-        function getRelativeTime(timeStr) {
+        // Hiển thị mốc thời gian gửi chính xác dạng HH:mm dd/MM/yyyy
+        function getExactTime(timeStr) {
+            if (!timeStr) return "Vừa xong";
+            
+            // Nếu dữ liệu trả về từ Apps Script đã khớp định dạng "HH:mm dd/MM/yyyy" thì hiển thị trực tiếp
+            if (/\d{2}:\d{2} \d{2}\/\d{2}\/\d{4}/.test(timeStr)) {
+                return timeStr;
+            }
+            
             try {
                 const date = new Date(timeStr);
-                if (isNaN(date.getTime())) return "Gần đây";
-                const diff = Date.now() - date.getTime();
-                const minutes = Math.floor(diff / 60000);
-                if (minutes < 1) return "Vừa xong";
-                if (minutes < 60) return `${minutes} phút trước`;
-                const hours = Math.floor(minutes / 60);
-                if (hours < 24) return `${hours} giờ trước`;
-                const days = Math.floor(hours / 24);
-                return `${days} ngày trước`;
-            } catch {
-                return "Gần đây";
+                if (isNaN(date.getTime())) return timeStr; // Fallback trả về nguyên bản
+                
+                const pad = function(num) { return String(num).padStart(2, '0'); };
+                const hours = pad(date.getHours());
+                const minutes = pad(date.getMinutes());
+                const day = pad(date.getDate());
+                const month = pad(date.getMonth() + 1);
+                const year = date.getFullYear();
+                
+                return hours + ":" + minutes + " " + day + "/" + month + "/" + year;
+            } catch (e) {
+                return timeStr;
             }
         }
 
@@ -959,19 +1047,19 @@
                 return;
             }
 
-            // Tính toán chỉ mục phân trang chuẩn 5 bài/trang
             const startIndex = (currentPage - 1) * itemsPerPage;
             const endIndex = startIndex + itemsPerPage;
             const pageItems = localWishes.slice(startIndex, endIndex);
 
-            pageItems.forEach((wish, idx) => {
+            pageItems.forEach(function(wish, idx) {
                 const initials = getInitials(wish.name);
-                const relTime = getRelativeTime(wish.timestamp);
+                // Sử dụng thời gian gửi chính xác thay cho thời gian tương đối
+                const exactTimeFormatted = getExactTime(wish.timestamp);
                 const avatarColors = ["bg-wedding-primary text-wedding-gold", "bg-wedding-gold text-white", "bg-wedding-dark text-wedding-champagne"];
                 const avatarColor = avatarColors[(startIndex + idx) % avatarColors.length];
 
                 const card = document.createElement("div");
-                card.className = "bg-[#faf9f6] p-5 rounded-sm border border-wedding-gold/15 flex gap-4 shadow-sm items-start transition hover:border-wedding-gold/30";
+                card.className = "bg-[#faf9f6] p-5 rounded-sm border border-wedding-gold/15 flex gap-4 shadow-sm items-start transition hover:border-wedding-gold/30" + (idx % 2 === 0 ? " bg-white" : "");
                 card.innerHTML = `
                     <div class="w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center font-sans font-bold text-xs tracking-wider ${avatarColor}">
                         ${initials}
@@ -979,9 +1067,9 @@
                     <div class="space-y-1 w-full">
                         <div class="flex justify-between items-center">
                             <h4 class="font-serif font-bold text-wedding-primary text-base">${wish.name}</h4>
-                            <span class="text-[10px] font-sans text-gray-400 uppercase tracking-widest font-semibold">${relTime}</span>
+                            <span class="text-[11px] font-sans text-gray-500 uppercase tracking-widest font-bold">${exactTimeFormatted}</span>
                         </div>
-                        <p class="text-sm text-gray-600 font-serif leading-relaxed italic">"${wish.message}"</p>
+                        <p class="text-sm text-gray-800 font-serif leading-relaxed italic font-medium">"${wish.message}"</p>
                     </div>
                 `;
                 content.appendChild(card);
@@ -997,7 +1085,7 @@
             const btnPrev = document.getElementById("btn-prev");
             const btnNext = document.getElementById("btn-next");
             
-            if (pageIndicator) pageIndicator.innerText = `Trang ${currentPage} / ${totalPages}`;
+            if (pageIndicator) pageIndicator.innerText = "Trang " + currentPage + " / " + totalPages;
             if (btnPrev) btnPrev.disabled = currentPage === 1;
             if (btnNext) btnNext.disabled = currentPage === totalPages;
         }
@@ -1028,7 +1116,7 @@
             const originalText = btnAI ? btnAI.innerHTML : "✨ Nhờ AI viết";
             if (btnAI) {
                 btnAI.disabled = true;
-                btnAI.innerHTML = `<span class="spinner w-4 h-4 border-2"></span> &nbsp;Đang nghĩ...`;
+                btnAI.innerHTML = `<span class="spinner w-4 h-4 border-2"></span>  Đang nghĩ...`;
             }
 
             const prompt = `Hãy viết một lời chúc đám cưới ngắn gọn (từ 1 đến 3 câu), phong cách "${style}" gửi đến chú rể tên Duy Hiệp và cô dâu tên Minh Nguyệt. Lời chúc được ký danh bởi người gửi là "${guestName}". Trả về kết quả trực tiếp bằng tiếng Việt tự nhiên nhất, không thừa chữ, không định dạng markdown.`;
@@ -1038,8 +1126,8 @@
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
             })
-            .then(res => res.json())
-            .then(data => {
+            .then(function(res) { return res.json(); })
+            .then(function(data) {
                 const wishText = data.candidates?.[0]?.content?.parts?.[0]?.text;
                 if (wishText && messageArea) {
                     messageArea.value = wishText.trim();
@@ -1047,18 +1135,87 @@
                     throw new Error("Không thể trích xuất văn bản");
                 }
             })
-            .catch(() => {
+            .catch(function() {
                 const fallbacks = {
-                    "chân thành và cảm động": `Chúc Duy Hiệp và Minh Nguyệt trăm năm gắn kết, cùng vun đắp một tổ ấm bình yên và rạng ngời tình yêu thương!`,
-                    "hài hước, lầy lội": `Chúc hai bạn Duy Hiệp và Minh Nguyệt chính thức bước vào hành trình 'gông xiềng hạnh phúc', chúc cỗ cưới ngon miệng, vui hết nấc nha!`,
-                    "ngôn tình, lãng mạn": `Chúc cho duyên phận đưa Duy Hiệp và Minh Nguyệt gặp gỡ sẽ hóa thành tình yêu thiên trường địa cửu, bên nhau trọn đời trọn kiếp.`,
-                    "thơ lục bát (2 đến 4 câu)": `Chúc cho Nguyệt sánh đôi Hiệp,\nTơ hồng dệt lối duyên lành bền lâu.`
-                };
+                    "chân thành và cảm động": [
+                        "Chúc Duy Hiệp và Minh Nguyệt trăm năm gắn kết, cùng vun đắp một tổ ấm bình yên và rạng ngời tình yêu thương!",
+                        "Chúc hai bạn luôn nắm chặt tay nhau vượt qua mọi chặng đường, cùng xây dựng một mái ấm ngập tràn tiếng cười.",
+                        "Từ hôm nay, hai trái tim đã chung một nhịp đập. Chúc anh chị mãi hạnh phúc và viên mãn bên nhau.",
+                        "Chúc cuộc sống hôn nhân của Duy Hiệp và Minh Nguyệt luôn đầy ắp yêu thương, sẻ chia và thấu hiểu.",
+                        "Mong rằng mỗi ngày bên nhau đều là một ngày đáng nhớ, ngập tràn niềm vui và hạnh phúc.",
+                        "Chúc hai bạn giữ mãi được sự chân thành, yêu thương và trân trọng nhau như những ngày đầu.",
+                        "Xin gửi lời chúc tốt đẹp nhất đến đôi uyên ương, chúc tình yêu luôn bền vững theo năm tháng.",
+                        "Chúc tổ ấm mới của hai bạn luôn đong đầy tiếng cười, sức khỏe và những điều tốt đẹp.",
+                        "Mong rằng hành trình hôn nhân sẽ mang đến cho hai bạn thật nhiều kỷ niệm đẹp và ý nghĩa.",
+                        "Chúc hai bạn luôn là điểm tựa vững chắc của nhau trong mọi hoàn cảnh của cuộc sống.",
+                        "Hạnh phúc không nằm ở những điều lớn lao mà ở việc luôn có nhau. Chúc hai bạn mãi hạnh phúc.",
+                        "Chúc tình yêu của Duy Hiệp và Minh Nguyệt ngày càng sâu đậm, bền lâu và viên mãn.",
+                        "Mong rằng mỗi khoảnh khắc bên nhau đều trở thành những ký ức đẹp nhất trong cuộc đời hai bạn.",
+                        "Xin chúc đôi vợ chồng trẻ luôn đồng hành, sẻ chia và yêu thương nhau suốt cuộc đời.",
+                        "Chúc hai bạn một cuộc sống hôn nhân ngọt ngào, bình an và ngập tràn tiếng cười."
+                    ],
+                    "hài hước, lầy lội": [
+                        "Chúc hai bạn chính thức gia nhập hội những người không được tự quyết cuối tuần nữa nhé!",
+                        "Chúc cuộc sống hôn nhân luôn vui vẻ, cơm lành canh ngọt, wifi mạnh và không ai giành điều khiển TV.",
+                        "Từ nay hết FA, chúc hai bạn hạnh phúc và nhớ phát cẩu lương vừa phải thôi nhé!",
+                        "Chúc hai bạn yêu nhau như thuở mới quen, nhưng đừng cãi nhau vì chuyện ăn gì mỗi tối.",
+                        "Chúc anh chị sống với nhau đến đầu bạc răng long và vẫn còn mật khẩu điện thoại chung.",
+                        "Xin chúc đôi trẻ sớm thành chuyên gia xử lý mọi drama gia đình bằng một nụ cười.",
+                        "Chúc cuộc sống sau cưới luôn ngọt hơn trà sữa và ít deadline hơn công việc.",
+                        "Từ nay chính thức có người kiểm tra điện thoại hợp pháp, chúc mừng chú rể nhé!",
+                        "Chúc hai bạn sáng cười với nhau, tối cười với nhau, cuối tháng vẫn cười khi nhìn tài khoản.",
+                        "Mong hai bạn luôn yêu nhau bất chấp giá xăng, giá vàng và giá đồ ăn tăng.",
+                        "Chúc anh chị hạnh phúc dài lâu, tiền vào như nước và mỡ không vào bụng.",
+                        "Chúc đôi bạn trẻ luôn giữ được phong độ yêu đương ngay cả khi phải thay tã cho con.",
+                        "Tình yêu là cùng nhau già đi, còn hôn nhân là cùng nhau tìm điều khiển TV.",
+                        "Chúc hai bạn mãi là cặp đôi đẹp nhất trong mắt nhau, kể cả lúc mới ngủ dậy.",
+                        "Hôm nay cưới nhau, mai vẫn yêu nhau, cuối tháng vẫn còn tiền là thành công mỹ mãn!"
+                    ],
+
+                    "ngôn tình, lãng mạn": [
+                        "Giữa muôn vàn người ngoài kia, hai bạn đã tìm thấy nhau. Chúc tình yêu ấy mãi vẹn nguyên theo năm tháng.",
+                        "Từ khoảnh khắc này, mọi bình minh và hoàng hôn đều trở nên ý nghĩa hơn vì có nhau đồng hành.",
+                        "Chúc câu chuyện tình yêu của Duy Hiệp và Minh Nguyệt luôn đẹp như những chương cuối của một cuốn tiểu thuyết.",
+                        "Tình yêu đẹp nhất là cùng nhau đi hết cuộc đời. Chúc hai bạn mãi nắm tay nhau không rời.",
+                        "Mong rằng ánh mắt hai bạn dành cho nhau hôm nay sẽ còn nguyên vẹn sau nhiều năm nữa.",
+                        "Từ nay về sau, mọi hành trình đều trở nên dịu dàng hơn khi có người cùng bước.",
+                        "Chúc hai trái tim luôn tìm thấy bình yên trong vòng tay của nhau.",
+                        "Yêu thương không chỉ là gặp đúng người, mà còn là cùng nhau đi đến cuối con đường.",
+                        "Chúc chuyện tình của hai bạn mãi là bản tình ca ngọt ngào nhất.",
+                        "Từ nhân duyên gặp gỡ đến lời thề trăm năm, chúc hai bạn mãi hạnh phúc viên mãn.",
+                        "Mỗi cuộc gặp gỡ đều là định mệnh, và hai bạn chính là món quà đẹp nhất dành cho nhau.",
+                        "Chúc tình yêu của anh chị luôn rực rỡ như ánh nắng đầu ngày và dịu dàng như ánh trăng đêm.",
+                        "Kể từ hôm nay, thế giới của hai người đã trở thành một. Chúc mãi mãi hạnh phúc.",
+                        "Tình yêu chân thành sẽ luôn tìm được đường về bên nhau. Chúc hai bạn trọn đời viên mãn.",
+                        "Mong rằng mỗi năm trôi qua, hai bạn lại càng yêu nhau nhiều hơn năm trước."
+                    ],
+
+                    "thơ lục bát (2 đến 4 câu)": [
+                        "Tơ hồng đã kết duyên ta,\nTrăm năm hạnh phúc một nhà bên nhau.",
+                        "Chúc cho duyên thắm bền lâu,\nVợ chồng hạnh phúc bạc đầu không phai.",
+                        "Ngày vui pháo nổ rộn vang,\nTrăm năm tình nghĩa vững vàng sắt son.",
+                        "Duyên lành kết bởi ý trời,\nChúc đôi hạnh phúc trọn đời bên nhau.",
+                        "Hôm nay nên nghĩa phu thê,\nMai sau hạnh phúc tràn trề yêu thương.",
+                        "Chúc cho tổ ấm an khang,\nCon đàn cháu đống rộn vang tiếng cười.",
+                        "Tình yêu kết trái hôm nay,\nTrăm năm gắn bó đắm say nghĩa tình.",
+                        "Duyên lành từ thuở gặp nhau,\nHôm nay kết tóc bạc đầu chẳng xa.",
+                        "Chúc cho cuộc sống thuận hòa,\nYêu thương đong đầy cửa nhà bình yên.",
+                        "Chén hồng xin chúc đôi bên,\nTrăm năm hạnh phúc vững bền thủy chung.",
+                        "Tơ duyên đã buộc thành đôi,\nChúc cho hạnh phúc sáng ngời mai sau.",
+                        "Mừng ngày hỷ sự sang trang,\nVợ chồng son sắt dịu dàng bên nhau.",
+                        "Hôm nay chung một con đường,\nMai sau giữ trọn yêu thương nghĩa tình.",
+                        "Duyên trời se sợi chỉ hồng,\nChúc đôi hạnh phúc mặn nồng dài lâu.",
+                        "Tình yêu kết nụ đơm hoa,\nTrăm năm viên mãn một nhà bình yên."
+                    ]
+                    };
+                    const messages = fallbacks[selectedStyle];
+                    const randomMessage =
+                    messages[Math.floor(Math.random() * messages.length)];
                 if (messageArea) {
                     messageArea.value = fallbacks[style] || `Chúc Duy Hiệp và Minh Nguyệt trăm năm hạnh phúc viên mãn!`;
                 }
             })
-            .finally(() => {
+            .finally(function() {
                 if (btnAI) {
                     btnAI.disabled = false;
                     btnAI.innerHTML = originalText;
@@ -1078,7 +1235,7 @@
 
         // Bộ đếm đếm ngược ngày cưới
         const weddingDate = new Date("Sep 19 2026 11:00:00").getTime();
-        setInterval(() => {
+        setInterval(function() {
             const now = new Date().getTime();
             const d = weddingDate - now;
             const days = Math.floor(d / (1000 * 60 * 60 * 24));
@@ -1108,19 +1265,19 @@
             }
         }, 1000);
 
-        // Hiệu ứng cánh hồng (Rose Petals) rơi dập dìu lãng mạn
+        // Hiệu ứng cánh hồng (Rose Petals) rơi lãng mạn
         const container = document.getElementById("flowers");
         if (container) {
             for (let i = 0; i < 28; i++) {
                 let flower = document.createElement("div");
                 flower.className = "petal";
                 const size = Math.random() * 12 + 10;
-                flower.style.width = `${size}px`;
-                flower.style.height = `${size + 5}px`;
-                // Chuyển sang gradient hồng đào / cánh hoa hồng tươi tắn mềm mại
+                flower.style.width = size + "px";
+                flower.style.height = (size + 5) + "px";
                 flower.style.background = "linear-gradient(135deg, rgba(255, 182, 193, 0.9) 0%, rgba(255, 105, 180, 0.3) 100%)";
                 flower.style.left = Math.random() * 100 + "vw";
-                flower.style.animationDuration = (Math.random() * 6 + 6) + "s"; // <--- ĐÃ KHẮC PHỤC LỖI CÚ PHÁP TẠI ĐÂY (thêm dấu cộng ghép chuỗi "s")
+                // FIX LỖI CÚ PHÁP )s CỦA TRÌNH BIÊN DỊCH TẠI ĐÂY
+                flower.style.animationDuration = (Math.random() * 6 + 6) + "s"; 
                 flower.style.animationDelay = Math.random() * 6 + "s";
                 container.appendChild(flower);
             }
@@ -1165,7 +1322,7 @@
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             let active = false;
 
-            confetti.forEach(p => {
+            confetti.forEach(function(p) {
                 p.x += p.speedX;
                 p.y += p.speedY;
                 p.speedY += 0.28;
@@ -1191,7 +1348,7 @@
             }
         }
 
-        // XỬ LÝ GỬI FORM RSVP & LƯU BÚT ĐỒNG BỘ 2 CHIỀU
+        // XỬ LÝ GỬI FORM RSVP & LƯU BÚT ĐỒNG BỘ 1 SHEET
         const rsvpForm = document.getElementById('rsvp-form');
         if (rsvpForm) {
             rsvpForm.addEventListener('submit', function(e) {
@@ -1219,15 +1376,17 @@
                     message: messageVal
                 };
 
-                // CƠ CHẾ OPTIMISTIC UI: Hiển thị lời chúc lập tức trên giao diện
-                const newWish = {
-                    name: nameVal,
-                    message: messageVal,
-                    timestamp: new Date().toISOString()
-                };
-                localWishes.unshift(newWish);
-                currentPage = 1; // Quay về trang đầu tiên
-                renderWishes(); // Cập nhật danh sách lời chúc ngay tức khắc
+                // CƠ CHẾ OPTIMISTIC UI: Đẩy lời chúc tạm thời lên Sổ lưu bút lập tức nếu khách có viết lời chúc
+                if (messageVal && messageVal.trim() !== "") {
+                    const newWish = {
+                        name: nameVal,
+                        message: messageVal,
+                        timestamp: new Date().toISOString()
+                    };
+                    localWishes.unshift(newWish);
+                    currentPage = 1;
+                    renderWishes();
+                }
 
                 // Gửi bất đồng bộ ngầm đến Google Sheets
                 fetch(apiEndpoint, {
@@ -1236,19 +1395,19 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 })
-                .then(() => {
+                .then(function() {
                     if (status) status.classList.remove('hidden');
                     if (btn) btn.innerText = "THÀNH CÔNG";
                     
                     // Hiệu ứng pháo hoa giấy tưng bừng ăn mừng
                     triggerConfetti();
 
-                    // Đồng bộ hóa tải lại dữ liệu chuẩn từ server
-                    setTimeout(() => {
+                    // Tải lại dữ liệu chuẩn từ Google Sheet server sau 2s
+                    setTimeout(function() {
                         fetchWishes();
                     }, 2000);
 
-                    setTimeout(() => {
+                    setTimeout(function() {
                         const formEl = document.getElementById('rsvp-form');
                         if (formEl) formEl.reset();
                         if (status) status.classList.add('hidden');
@@ -1258,11 +1417,11 @@
                         }
                     }, 3000);
                 })
-                .catch(err => {
+                .catch(function(err) {
                     console.error("Lỗi gửi phản hồi lên Google Sheets:", err);
                     if (btn) {
-                        btn.innerText = "GỬI LẠI";
                         btn.disabled = false;
+                        btn.innerText = "GỬI LẠI";
                     }
                 });
             });
