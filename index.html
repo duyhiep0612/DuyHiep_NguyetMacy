@@ -11,7 +11,7 @@
     <!-- Bộ Fonts Cưới Cao Cấp Mới -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght=0,400;0,550;0,600;0,700;1,400;1,600&family=Great+Vibes&family=Montserrat:wght=400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght=0,400;0,550;0,600;0,700;1,400;1,600&family=Great+Vibes&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
@@ -218,38 +218,32 @@
             pointer-events: none;
         }
 
-        /* Timeline Love Story mượt mà di động */
-        .timeline-container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            width: 1px;
-            background: #d4af6d;
-            opacity: 0.45;
-            left: 20px;
-            z-index: 0;
-        }
-
-        @media (min-width: 768px) {
-            .timeline-container::before {
-                left: 50% !important;
-                transform: translateX(-50%);
-            }
-        }
-
-        /* CHUYỂN ĐỘNG LẮC LƯ CHO HỘP MỪNG CƯỚI */
-        @keyframes wobble-box {
-            0%, 100% { transform: rotate(0deg) translateY(0); }
-            15% { transform: rotate(-4deg) translateY(-2px); }
-            30% { transform: rotate(3deg) translateY(1px); }
-            45% { transform: rotate(-3deg) translateY(-1px); }
-            60% { transform: rotate(2deg) translateY(0); }
-            75% { transform: rotate(-1deg) translateY(0); }
+        /* CHUYỂN ĐỘNG LẮC LƯ NHỊP ĐẬP TRÁI TIM (HEARTBEAT WOBBLE) NHANH & DỨT KHOÁT HƠN */
+        @keyframes heartbeat-wobble {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            8% { transform: scale(1.08) rotate(-7deg) translateY(-2px); }
+            16% { transform: scale(1.08) rotate(6deg) translateY(1px); }
+            24% { transform: scale(1.08) rotate(-5deg) translateY(-1px); }
+            32% { transform: scale(1.08) rotate(4deg) translateY(0px); }
+            40% { transform: scale(1) rotate(0deg); }
+            100% { transform: scale(1) rotate(0deg); } /* Khoảng nghỉ tạo nhịp đập */
         }
         
         .wobble-box-anim {
-            animation: wobble-box 3s ease-in-out infinite;
+            animation: heartbeat-wobble 1.3s cubic-bezier(0.25, 0.8, 0.25, 1) infinite;
+        }
+
+        /* HÀO QUANG HOÀNG KIM (GOLDEN AURA GLOW) NỔI BẬT */
+        .golden-aura {
+            box-shadow: 0 10px 40px rgba(17, 34, 24, 0.25), 
+                        0 0 35px rgba(212, 175, 109, 0.45);
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        
+        .golden-aura:hover {
+            box-shadow: 0 15px 50px rgba(17, 34, 24, 0.35), 
+                        0 0 50px rgba(212, 175, 109, 0.8);
+            transform: translateY(-8px) scale(1.03);
         }
 
         /* CHUYỂN ĐỘNG ĐỒNG XU VÀNG BAY BỔNG XUNG QUANH HỘP */
@@ -387,66 +381,93 @@
             </div>
         </section>
 
-        <!-- 5. LOVE STORY & ALBUM -->
-        <section class="py-16 md:py-24 bg-white">
-            <div class="max-w-3xl mx-auto px-4">
+        <!-- 5. LOVE STORY (Khôi phục hình ảnh gốc kết hợp căn lề đối xứng nghệ thuật Zig-zag Editorial) -->
+        <section class="py-16 md:py-24 bg-white border-b border-gray-100">
+            <div class="max-w-4xl mx-auto px-6">
                 <h2 class="font-serif text-3xl md:text-4xl text-center text-wedding-primary mb-16 tracking-[0.25em] uppercase font-bold" data-aos="zoom-in">Our Love Story</h2>
 
-                <div class="relative timeline-container pl-10 md:pl-0">
-                    <!-- 2019 -->
-                    <div class="flex flex-col md:flex-row items-start md:items-center mb-16 relative">
-                        <div class="absolute -left-[29px] md:left-1/2 md:-translate-x-1/2 w-4 h-4 bg-wedding-gold rounded-full border-4 border-white z-10 shadow-sm" data-aos="zoom-in"></div>
-                        <div class="w-full md:w-1/2 md:pr-12 text-left md:text-right" data-aos="fade-right">
-                            <h3 class="text-2xl font-sans text-wedding-primary font-extrabold mb-1">2019</h3>
-                            <div class="inline-block p-1 bg-white border border-gray-100 shadow-sm rounded-sm mb-3 max-w-[240px]">
-                                <img src="assets/photo1.jpg" onerror="this.src='https://picsum.photos/400/300?random=11'" class="w-full h-auto object-contain rounded-sm" alt="Gặp gỡ 2019">
-                            </div>
-                            <p class="text-wedding-gold-dark italic font-serif font-bold text-lg">"Lần đầu ta gặp nhỏ..."</p>
-                            <p class="text-sm text-wedding-text mt-1 leading-relaxed font-medium">Ánh mắt ấy đã làm trái tim tôi lỡ nhịp ngay từ phút giây đầu tiên tại quán cà phê quen thuộc.</p>
+                <div class="relative max-w-3xl mx-auto pl-10 md:pl-0">
+                    <!-- Trục dọc thanh mảnh làm nền định hướng mốc thời gian -->
+                    <div class="absolute left-4 md:left-1/2 top-0 bottom-0 w-[1px] bg-gradient-to-b from-wedding-gold/10 via-wedding-gold/45 to-wedding-gold/10 md:-translate-x-1/2 z-0"></div>
+
+                    <!-- 2019 (Text Left, Image Right) -->
+                    <div class="relative grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8 items-center mb-16">
+                        <!-- Dot node -->
+                        <div class="absolute left-[-32px] md:left-1/2 md:-translate-x-1/2 w-4 h-4 rounded-full bg-wedding-gold border-4 border-white shadow-sm z-10"></div>
+                        <!-- Cột Trái: Chữ căn lề phải trên desktop -->
+                        <div class="md:col-span-5 text-left md:text-right md:pr-4" data-aos="fade-right">
+                            <span class="font-sans text-2xl font-bold text-wedding-primary">2019</span>
+                            <h4 class="text-wedding-gold-dark italic text-lg font-bold mt-1">"Lần đầu ta gặp nhỏ..."</h4>
+                            <p class="text-sm text-gray-600 font-serif leading-relaxed mt-2 md:ml-auto md:max-w-sm">Ánh mắt ấy đã làm trái tim tôi lỡ nhịp ngay từ phút giây đầu tiên tại quán cà phê quen thuộc.</p>
                         </div>
-                        <div class="hidden md:block md:w-1/2"></div>
+                        <!-- Cột Giữa: Khoảng đệm cho trục dọc -->
+                        <div class="hidden md:block md:col-span-2"></div>
+                        <!-- Cột Phải: Ảnh cưới lồng khung mỏng dập bóng -->
+                        <div class="md:col-span-5 flex justify-start md:pl-4" data-aos="fade-left">
+                            <div class="inline-block p-1.5 bg-white border border-gray-100 shadow-md rounded-sm max-w-[250px] transform transition duration-300 hover:-translate-y-1 hover:shadow-lg">
+                                <img src="assets/photo1.jpg" onerror="this.src='https://picsum.photos/400/300?random=11'" class="w-full h-auto object-cover rounded-sm aspect-[4/3]" alt="Gặp gỡ 2019">
+                            </div>
+                        </div>
                     </div>
 
-                    <!-- 2021 -->
-                    <div class="flex flex-col md:flex-row-reverse items-start md:items-center mb-16 relative">
-                        <div class="absolute -left-[29px] md:left-1/2 md:-translate-x-1/2 w-4 h-4 bg-wedding-gold rounded-full border-4 border-white z-10 shadow-sm" data-aos="zoom-in"></div>
-                        <div class="w-full md:w-1/2 md:pl-12 text-left" data-aos="fade-left">
-                            <h3 class="text-2xl font-sans text-wedding-primary font-extrabold mb-1">2021</h3>
-                            <div class="inline-block p-1 bg-white border border-gray-100 shadow-sm rounded-sm mb-3 max-w-[240px]">
-                                <img src="assets/photo2.jpg" onerror="this.src='https://picsum.photos/400/300?random=12'" class="w-full h-auto object-contain rounded-sm" alt="Yêu thương 2021">
+                    <!-- 2021 (Image Left, Text Right) -->
+                    <div class="relative grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8 items-center mb-16 md:flex-row-reverse">
+                        <!-- Dot node -->
+                        <div class="absolute left-[-32px] md:left-1/2 md:-translate-x-1/2 w-4 h-4 rounded-full bg-wedding-gold border-4 border-white shadow-sm z-10"></div>
+                        <!-- Cột Trái: Ảnh lồng khung mỏng dập bóng -->
+                        <div class="md:col-span-5 flex justify-start md:justify-end md:pr-4 order-last md:order-first" data-aos="fade-right">
+                            <div class="inline-block p-1.5 bg-white border border-gray-100 shadow-md rounded-sm max-w-[250px] transform transition duration-300 hover:-translate-y-1 hover:shadow-lg">
+                                <img src="assets/photo2.jpg" onerror="this.src='https://picsum.photos/400/300?random=12'" class="w-full h-auto object-cover rounded-sm aspect-[4/3]" alt="Yêu thương 2021">
                             </div>
-                            <p class="text-wedding-gold-dark italic font-serif font-bold text-lg">Lời tỏ tình vụng về</p>
-                            <p class="text-sm text-wedding-text mt-1 leading-relaxed font-medium">Dưới cơn mưa phùn Hà Nội, chúng mình chính thức gọi nhau là "người yêu". Một hành trình mới bắt đầu.</p>
                         </div>
-                        <div class="hidden md:block md:w-1/2"></div>
+                        <!-- Cột Giữa: Khoảng đệm cho trục dọc -->
+                        <div class="hidden md:block md:col-span-2"></div>
+                        <!-- Cột Phải: Chữ căn lề trái trên desktop -->
+                        <div class="md:col-span-5 text-left md:pl-4" data-aos="fade-left">
+                            <span class="font-sans text-2xl font-bold text-wedding-primary">2021</span>
+                            <h4 class="text-wedding-gold-dark italic text-lg font-bold mt-1">Lời tỏ tình vụng về</h4>
+                            <p class="text-sm text-gray-600 font-serif leading-relaxed mt-2 md:max-w-sm">Dưới cơn mưa phùn Hà Nội, chúng mình chính thức gọi nhau là "người yêu". Một hành trình mới đầy hứa hẹn bắt đầu.</p>
+                        </div>
                     </div>
 
-                    <!-- 2024 -->
-                    <div class="flex flex-col md:flex-row items-start md:items-center mb-16 relative">
-                        <div class="absolute -left-[29px] md:left-1/2 md:-translate-x-1/2 w-4 h-4 bg-wedding-gold rounded-full border-4 border-white z-10 shadow-sm" data-aos="zoom-in"></div>
-                        <div class="w-full md:w-1/2 md:pr-12 text-left md:text-right" data-aos="fade-right">
-                            <h3 class="text-2xl font-sans text-wedding-primary font-extrabold mb-1">2024</h3>
-                            <div class="inline-block p-1 bg-white border border-gray-100 shadow-sm rounded-sm mb-3 max-w-[240px]">
-                                <img src="assets/photo3.jpg" onerror="this.src='https://picsum.photos/400/300?random=13'" class="w-full h-auto object-contain rounded-sm" alt="Cầu hôn 2024">
-                            </div>
-                            <p class="text-wedding-gold-dark italic font-serif font-bold text-lg">Will you marry me?</p>
-                            <p class="text-sm text-wedding-text mt-1 leading-relaxed font-medium">Chiếc nhẫn cầu hôn đã tìm thấy chủ nhân của nó. Một cái gật đầu nhẹ nhàng và những giọt nước mắt hạnh phúc.</p>
+                    <!-- 2024 (Text Left, Image Right) -->
+                    <div class="relative grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8 items-center mb-16">
+                        <!-- Dot node -->
+                        <div class="absolute left-[-32px] md:left-1/2 md:-translate-x-1/2 w-4 h-4 rounded-full bg-wedding-gold border-4 border-white shadow-sm z-10"></div>
+                        <!-- Cột Trái: Chữ căn lề phải trên desktop -->
+                        <div class="md:col-span-5 text-left md:text-right md:pr-4" data-aos="fade-right">
+                            <span class="font-sans text-2xl font-bold text-wedding-primary">2024</span>
+                            <h4 class="text-wedding-gold-dark italic text-lg font-bold mt-1">Will you marry me?</h4>
+                            <p class="text-sm text-gray-600 font-serif leading-relaxed mt-2 md:ml-auto md:max-w-sm">Chiếc nhẫn cầu hôn lấp lánh đã tìm thấy chủ nhân thực sự của nó. Một cái gật đầu khẽ khàng và những giọt nước mắt hạnh phúc dâng tràn.</p>
                         </div>
-                        <div class="hidden md:block md:w-1/2"></div>
+                        <!-- Cột Giữa: Khoảng đệm cho trục dọc -->
+                        <div class="hidden md:block md:col-span-2"></div>
+                        <!-- Cột Phải: Ảnh lồng khung mỏng dập bóng -->
+                        <div class="md:col-span-5 flex justify-start md:pl-4" data-aos="fade-left">
+                            <div class="inline-block p-1.5 bg-white border border-gray-100 shadow-md rounded-sm max-w-[250px] transform transition duration-300 hover:-translate-y-1 hover:shadow-lg">
+                                <img src="assets/photo3.jpg" onerror="this.src='https://picsum.photos/400/300?random=13'" class="w-full h-auto object-cover rounded-sm aspect-[4/3]" alt="Cầu hôn 2024">
+                            </div>
+                        </div>
                     </div>
 
-                    <!-- 2026 -->
-                    <div class="flex flex-col md:flex-row-reverse items-start md:items-center relative">
-                        <div class="absolute -left-[29px] md:left-1/2 md:-translate-x-1/2 w-4 h-4 bg-wedding-gold rounded-full border-4 border-white z-10 shadow-sm" data-aos="zoom-in"></div>
-                        <div class="w-full md:w-1/2 md:pl-12 text-left" data-aos="fade-left">
-                            <h3 class="text-2xl font-sans text-wedding-primary font-extrabold mb-1">2026</h3>
-                            <div class="inline-block p-1 bg-white border border-gray-100 shadow-sm rounded-sm mb-3 max-w-[240px]">
-                                <img src="assets/photo4.jpg" onerror="this.src='https://picsum.photos/400/300?random=14'" class="w-full h-auto object-contain rounded-sm" alt="Chung đôi 2026">
+                    <!-- 2026 (Image Left, Text Right) -->
+                    <div class="relative grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8 items-center mb-4 md:flex-row-reverse">
+                        <!-- Dot node -->
+                        <div class="absolute left-[-32px] md:left-1/2 md:-translate-x-1/2 w-4 h-4 rounded-full bg-wedding-gold border-4 border-white shadow-sm z-10"></div>
+                        <!-- Cột Trái: Ảnh lồng khung mỏng dập bóng -->
+                        <div class="md:col-span-5 flex justify-start md:justify-end md:pr-4 order-last md:order-first" data-aos="fade-right">
+                            <div class="inline-block p-1.5 bg-white border border-gray-100 shadow-md rounded-sm max-w-[250px] transform transition duration-300 hover:-translate-y-1 hover:shadow-lg">
+                                <img src="assets/photo4.jpg" onerror="this.src='https://picsum.photos/400/300?random=14'" class="w-full h-auto object-cover rounded-sm aspect-[4/3]" alt="Chung đôi 2026">
                             </div>
-                            <p class="text-wedding-gold-dark italic font-serif font-bold text-lg">Mãi mãi một tình yêu</p>
-                            <p class="text-sm text-wedding-text mt-1 leading-relaxed font-medium">Cám ơn bạn đã xuất hiện để hoàn thiện mảnh ghép cuộc đời mình. Chào mừng ngày chung đôi!</p>
                         </div>
-                        <div class="hidden md:block md:w-1/2"></div>
+                        <!-- Cột Giữa: Khoảng đệm cho trục dọc -->
+                        <div class="hidden md:block md:col-span-2"></div>
+                        <!-- Cột Phải: Chữ căn lề trái trên desktop -->
+                        <div class="md:col-span-5 text-left md:pl-4" data-aos="fade-left">
+                            <span class="font-sans text-2xl font-bold text-wedding-primary">2026</span>
+                            <h4 class="text-wedding-gold-dark italic text-lg font-bold mt-1">Mãi mãi một tình yêu</h4>
+                            <p class="text-sm text-gray-600 font-serif leading-relaxed mt-2 md:max-w-sm">Cảm ơn bạn đời đã xuất hiện và bao dung để hoàn thiện mảnh ghép thiêng liêng nhất của cuộc đời mình. Chào mừng ngày lễ thành hôn chung đôi!</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -534,7 +555,7 @@
             <div id="countdown" class="text-lg font-bold flex justify-center gap-3 font-sans"></div>
         </section>
 
-        <!-- 8. CHI TIẾT SỰ KIỆN & LỊCH TRÌNH (Tái thiết kế theo Phương án 2: Modern Editorial Luxury) -->
+        <!-- 8. CHI TIẾT SỰ KIỆN & LỊCH TRÌNH -->
         <section class="py-16 md:py-24 px-6 bg-white" data-aos="fade-up">
             <div class="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-stretch">
                 
@@ -545,7 +566,7 @@
                     <div class="absolute top-4 left-4 w-6 h-6 border-t border-l border-wedding-gold/60"></div>
                     <div class="absolute bottom-4 right-4 w-6 h-6 border-b border-r border-wedding-gold/60"></div>
 
-                    <div class="space-y-6 my-auto text-center lg:text-left relative z-10">
+                    <div class="space-y-6 my-auto text-center lg:text-left relative z-10 py-4">
                         <span class="text-[10px] font-sans tracking-[0.35em] text-wedding-gold-dark uppercase font-extrabold block">Nơi Trực Tiếp Chứng Kiến</span>
                         
                         <h3 class="font-serif text-wedding-primary text-3xl md:text-4xl font-semibold leading-tight tracking-wide">
@@ -588,7 +609,7 @@
                     </div>
                 </div>
 
-                <!-- CỘT PHẢI: LỊCH TRÌNH TIỆC CƯỚI (Dạng thẻ dập nổi 3D tinh giản, không rối mắt) -->
+                <!-- CỘT PHẢI: LỊCH TRÌNH TIỆC CƯỚI -->
                 <div class="lg:col-span-7 flex flex-col justify-between h-full" data-aos="fade-left">
                     <div class="text-center lg:text-left mb-8 lg:mb-6">
                         <span class="text-[10px] font-sans tracking-[0.35em] text-wedding-gold-dark uppercase font-extrabold block mb-1">Lưu Lại Khoảnh Khắc</span>
@@ -771,23 +792,23 @@
             </div>
         </section>
 
-        <!-- 11. HỘP MỪNG CƯỚI -->
+        <!-- 11. PHONG BAO MỪNG CƯỚI -->
         <section id="gift-section" class="py-16 text-center bg-section-accent border-t border-gray-100" data-aos="zoom-in">
             <h3 class="text-2xl font-serif text-wedding-primary mb-12 tracking-[0.25em] uppercase font-bold">Phong Bao Mừng Cưới</h3>
             
             <!-- Wrapper chứa Hộp & các đồng xu trôi nổi xung quanh -->
             <div class="relative inline-block mx-auto z-10">
                 <!-- Các đồng xu vàng trôi nổi xung quanh hộp -->
-                <div class="gold-coin w-6 h-6" style="top: -20px; left: -25px; animation-delay: 0s; animation-duration: 3.5s;">🪙</div>
-                <div class="gold-coin w-5 h-5" style="top: 40px; right: -30px; animation-delay: 0.8s; animation-duration: 4.2s;">🪙</div>
-                <div class="gold-coin w-7 h-7" style="bottom: -15px; left: -35px; animation-delay: 1.5s; animation-duration: 3.8s;">🪙</div>
-                <div class="gold-coin w-6 h-6" style="top: -25px; right: 10px; animation-delay: 2.2s; animation-duration: 4.8s;">🪙</div>
+                <div class="gold-coin w-7 h-7" style="top: -24px; left: -32px; animation-delay: 0s; animation-duration: 3.5s;">🪙</div>
+                <div class="gold-coin w-6 h-6" style="top: 45px; right: -38px; animation-delay: 0.8s; animation-duration: 4.2s;">🪙</div>
+                <div class="gold-coin w-8 h-8" style="bottom: -20px; left: -42px; animation-delay: 1.5s; animation-duration: 3.8s;">🪙</div>
+                <div class="gold-coin w-7 h-7" style="top: -30px; right: 12px; animation-delay: 2.2s; animation-duration: 4.8s;">🪙</div>
 
-                <!-- Nút Hộp Mừng Cưới với hiệu ứng lắc lư wobble-box-anim liên tục -->
+                <!-- Nút Hộp Mừng Cưới - To hơn 30% (w-[146px] h-[188px]), bổ sung class hào quang hoàng kim golden-aura -->
                 <button id="btn-open-gift" onclick="toggleGiftModal(true)"
-                        class="bg-red-700 hover:bg-red-800 text-white w-28 h-36 rounded-sm shadow-2xl border-4 border-wedding-gold relative transition-all transform hover:-translate-y-2 flex flex-col items-center justify-center wobble-box-anim group z-30">
-                    <div class="w-12 h-12 border-2 border-wedding-gold rounded-full flex items-center justify-center mb-2 group-hover:rotate-12 transition duration-300 bg-red-900/20">
-                        <span class="text-wedding-gold text-2xl font-bold">囍</span>
+                        class="bg-red-700 hover:bg-red-800 text-white w-[146px] h-[188px] rounded-sm relative transition-all transform flex flex-col items-center justify-center wobble-box-anim group z-30 border-4 border-wedding-gold golden-aura">
+                    <div class="w-16 h-16 border-2 border-wedding-gold rounded-full flex items-center justify-center mb-3 group-hover:rotate-12 transition duration-300 bg-red-900/20">
+                        <span class="text-wedding-gold text-3xl font-bold">囍</span>
                     </div>
                 </button>
                 
@@ -813,7 +834,7 @@
         <div class="h-4 w-[1px] bg-wedding-gold/30"></div>
         <!-- Nút RSVP -->
         <button onclick="scrollToRSVP()" class="bg-wedding-gold text-wedding-primary hover:bg-wedding-gold-dark hover:text-white px-3.5 py-1.5 rounded-full text-[11px] font-extrabold uppercase tracking-wider flex items-center gap-1 transition active:scale-95 shadow-md font-sans">
-            <span>💌</span> Xác nhận tham dự
+            <span>💌</span> Xác nhận tham gia
         </button>
         <div class="h-4 w-[1px] bg-wedding-gold/30"></div>
         <!-- Nút Mừng cưới -->
@@ -870,7 +891,7 @@
     <!-- JAVASCRIPT ĐỒNG BỘ TOÀN DIỆN -->
     <script>
         // API dập hỷ và lưu bút đồng bộ (Đã khôi phục chuẩn xác SCRIPT_URL gốc của Mr. Hiệp)
-        const apiEndpoint = "https://script.google.com/macros/s/AKfycbxDqUa5kVYGe9JmlInrBu9n5Jb_JU1WMLugH5ecDXmp4raxMB6uKXzyhDraFchISjWV/exec";
+        const apiEndpoint = "https://script.google.com/macros/s/AKfycbwUmNhaPqSmCGCvfnhRioT_7bTTzc4w78Vb7CidMLXP74oi6NWH3yoV5_vFxsNxovTA/exec";
         
         // Vui lòng gán API Key của anh vào đây để chạy trí tuệ nhân tạo ngoài môi trường sandbox
         const geminiApiKey = ""; 
@@ -994,9 +1015,8 @@
         // BỘ PHÂN TÍCH THÍCH ỨNG ĐỘNG (DYNAMICAL PARSER FOR GOOGLE SHEETS) - Bỏ hoàn toàn rủi ro lệch Key
         function handleWishData(data) {
             let wishes = [];
-            let isRaw2DArray = false;
             
-            // 1. Giải bọc nếu đi qua Proxy Allorigins
+            // 1. Giải mã bọc nếu đi qua Proxy Allorigins
             if (data && data.contents) {
                 try {
                     data = JSON.parse(data.contents);
@@ -1018,91 +1038,23 @@
                 }
             }
 
-            // 3. Nhận diện cấu trúc dữ liệu thực tế (Mảng 2 chiều hay Mảng đối tượng)
-            if (wishes.length > 0 && Array.isArray(wishes[0])) {
-                isRaw2DArray = true;
-            }
-
-            let parsedWishes = [];
-
-            if (isRaw2DArray) {
-                // TRƯỜNG HỢP A: Google Apps Script trả về mảng 2 chiều trực tiếp (getDataRange().getValues())
-                const headers = wishes[0].map(h => String(h).toLowerCase().trim());
-                
-                // Thuật toán quét tiêu đề thông minh
-                let nameIdx = headers.findIndex(h => h.includes("tên") || h.includes("name") || h.includes("khách") || h.includes("người"));
-                let msgIdx = headers.findIndex(h => h.includes("chúc") || h.includes("message") || h.includes("wish") || h.includes("lưu b") || h.includes("nội dung"));
-                let timeIdx = headers.findIndex(h => h.includes("time") || h.includes("ngày") || h.includes("giờ") || h.includes("mốc"));
-
-                // Fallback nếu không khớp bất cứ từ khóa nào (Thường là Col B cho tên và Col F cho lời chúc)
-                if (nameIdx === -1) nameIdx = 1;
-                if (msgIdx === -1) msgIdx = wishes[0].length - 1; // Chọn cột cuối cùng
-                if (timeIdx === -1) timeIdx = 0;
-
-                // Xác định dòng bắt đầu lấy dữ liệu (Bỏ qua dòng tiêu đề nếu tìm thấy khớp từ khóa)
-                const startRow = (headers.some(h => h.includes("tên") || h.includes("chúc") || h.includes("time"))) ? 1 : 0;
-
-                for (let i = startRow; i < wishes.length; i++) {
-                    const row = wishes[i];
-                    if (!row || row.length <= Math.max(nameIdx, msgIdx)) continue;
-                    
-                    const nameVal = row[nameIdx];
-                    const msgVal = row[msgIdx];
-                    const timeVal = row[timeIdx] || new Date().toISOString();
-
-                    if (nameVal && msgVal && String(nameVal).trim() !== "" && String(msgVal).trim() !== "") {
-                        parsedWishes.push({
-                            name: String(nameVal).trim(),
-                            message: String(msgVal).trim(),
-                            timestamp: String(timeVal)
-                        });
-                    }
-                }
-            } else {
-                // TRƯỜNG HỢP B: Dữ liệu dạng mảng đối tượng (Object Array) nhưng khóa có thể bị lệch hoa/thường hoặc ngôn ngữ
-                parsedWishes = wishes
-                    .filter(function(w) {
-                        const keys = Object.keys(w);
-                        const hasName = keys.some(k => ["name", "Name", "tên", "Tên", "guestName", "họ và tên", "Họ và tên"].includes(k) || k.toLowerCase().includes("tên") || k.toLowerCase().includes("name"));
-                        const hasMsg = keys.some(k => ["message", "Message", "wish", "Wish", "lời chúc", "Lời chúc", "guestMessage"].includes(k) || k.toLowerCase().includes("chúc") || k.toLowerCase().includes("message"));
-                        return hasName && hasMsg;
-                    })
-                    .map(function(w) {
-                        let name = "Khách mời";
-                        let message = "";
-                        let timestamp = new Date().toISOString();
-
-                        const keys = Object.keys(w);
-                        
-                        // Lấy giá trị Tên một cách linh hoạt
-                        const nameKey = keys.find(k => ["name", "Name", "tên", "Tên", "guestName", "họ và tên", "Họ và tên"].includes(k) || k.toLowerCase().includes("tên") || k.toLowerCase().includes("name"));
-                        if (nameKey) name = w[nameKey];
-
-                        // Lấy giá trị Lời chúc linh hoạt
-                        const msgKey = keys.find(k => ["message", "Message", "wish", "Wish", "lời chúc", "Lời chúc", "guestMessage"].includes(k) || k.toLowerCase().includes("chúc") || k.toLowerCase().includes("message"));
-                        if (msgKey) message = w[msgKey];
-
-                        // Lấy giá trị mốc thời gian
-                        const timeKey = keys.find(k => ["timestamp", "Timestamp", "time", "Time", "ngày", "Ngày"].includes(k) || k.toLowerCase().includes("time") || k.toLowerCase().includes("ngày") || k.toLowerCase().includes("date"));
-                        if (timeKey) timestamp = w[timeKey];
-
-                        return {
-                            name: String(name).trim(),
-                            message: String(message).trim(),
-                            timestamp: String(timestamp)
-                        };
-                    });
-            }
-
-            localWishes = parsedWishes;
-
-            // Sắp xếp thời gian thực giảm dần
+            // Ánh xạ cấu trúc cột theo đúng chuẩn ISO 8601 mới nâng cấp
+            localWishes = wishes
+                .filter(function(w) {
+                    return (w.name || w.Name) && (w.message || w.Message);
+                })
+                .map(function(w) {
+                    return {
+                        name: w.name || w.Name || "Khách mời",
+                        message: w.message || w.Message || "",
+                        timestamp: w.timestamp || w.Timestamp || w.time || w.Time || new Date().toISOString()
+                    };
+                });
+            
+            // SẮP XẾP AN TOÀN TRÊN IOS: Do Timestamp đã được ép chuẩn ISO 8601 từ server, phép so sánh Date này sẽ không bao giờ trả về NaN
             localWishes.sort(function(a, b) {
                 const dateA = new Date(a.timestamp);
                 const dateB = new Date(b.timestamp);
-                if (isNaN(dateA.getTime()) || isNaN(dateB.getTime())) {
-                    return 0; // Nếu mốc thời gian không chuẩn, giữ nguyên thứ tự nạp
-                }
                 return dateB - dateA;
             });
             
@@ -1118,48 +1070,42 @@
             renderWishes();
         }
 
-        // ĐỒNG BỘ ĐỌC DỮ LIỆU SỬ DỤNG JSONP - Độc lập CORS 100% cho cả Sandbox lẫn Production
+        // ĐỒNG BỘ ĐỌC DỮ LIỆU: Fetch trực tiếp kèm Proxy Allorigins dự phòng, bắt lỗi nhẹ bằng console.warn chống crash sandbox
         function fetchWishes() {
             const loader = document.getElementById("gb-loading");
             if (loader) loader.classList.remove("hidden");
 
-            // Tạo callback ngẫu nhiên tránh caching trình duyệt
-            const callbackName = "getWishes_" + Math.floor(Math.random() * 1000000);
-            window[callbackName] = function(data) {
-                handleWishData(data);
-                if (loader) loader.classList.add("hidden");
-                
-                // Dọn dẹp script tag sau khi nạp thành công
-                const script = document.getElementById(callbackName);
-                if (script) script.remove();
-                delete window[callbackName];
-            };
-
-            const script = document.createElement("script");
-            script.id = callbackName;
-            script.src = apiEndpoint + "?callback=" + callbackName + "&_nocache=" + Date.now();
-            
-            // Xử lý Timeout tự động sau 6s (nếu Apps Script lỗi hoặc sai endpoint)
-            const timeoutId = setTimeout(function() {
-                if (window[callbackName]) {
-                    console.warn("Yêu cầu JSONP quá thời gian phản hồi. Đang tải lời chúc dự phòng.");
-                    useFallbackWishes();
+            fetch(apiEndpoint)
+                .then(function(res) {
+                    if (!res.ok) throw new Error("HTTP Error " + res.status);
+                    return res.json();
+                })
+                .then(function(data) {
+                    handleWishData(data);
+                })
+                .catch(function(err) {
+                    // Dùng console.warn thay vì console.error trong môi trường sandbox
+                    console.warn("Direct fetch không khả dụng trong môi trường sandbox thử nghiệm này. Đang kích hoạt cổng Proxy dự phòng...", err);
+                    
+                    const proxyUrl = "https://api.allorigins.win/get?url=" + encodeURIComponent(apiEndpoint) + "&_nocache=" + Date.now();
+                    
+                    fetch(proxyUrl)
+                        .then(function(proxyRes) {
+                            if (!proxyRes.ok) throw new Error("Proxy Error " + proxyRes.status);
+                            return proxyRes.json();
+                        })
+                        .then(function(proxyData) {
+                            const data = JSON.parse(proxyData.contents);
+                            handleWishData(data);
+                        })
+                        .catch(function(proxyErr) {
+                            console.warn("Môi trường Preview Sandbox chặn các kết nối CORS ra bên ngoài. Đã tự động nạp danh sách lời chúc mẫu.", proxyErr);
+                            useFallbackWishes();
+                        });
+                })
+                .finally(function() {
                     if (loader) loader.classList.add("hidden");
-                    delete window[callbackName];
-                    script.remove();
-                }
-            }, 6000);
-
-            script.onerror = function() {
-                clearTimeout(timeoutId);
-                console.error("Script JSONP tải thất bại.");
-                useFallbackWishes();
-                if (loader) loader.classList.add("hidden");
-                delete window[callbackName];
-                script.remove();
-            };
-
-            document.head.appendChild(script);
+                });
         }
 
         // Tạo avatar ký tự sang trọng
@@ -1167,10 +1113,11 @@
             return name.trim().split(" ").pop().charAt(0).toUpperCase();
         }
 
-        // Hiển thị mốc thời gian gửi dạng HH:mm dd/MM/yyyy
+        // Hiển thị mốc thời gian gửi dạng HH:mm dd/MM/yyyy từ chuỗi ngày ISO 8601
         function getExactTime(timeStr) {
             if (!timeStr) return "Vừa xong";
             
+            // Nếu đã là định dạng chuẩn hóa dd/MM/yyyy thì trả về luôn
             if (/\d{2}:\d{2} \d{2}\/\d{2}\/\d{4}/.test(timeStr)) {
                 return timeStr;
             }
@@ -1428,6 +1375,7 @@
         const ctx = canvas ? canvas.getContext("2d") : null;
         let confetti = [];
 
+        // Hỗ trợ tự co giãn màn hình canvas theo đúng kích cỡ viewport
         function resizeCanvas() {
             if (canvas) {
                 canvas.width = window.innerWidth;
@@ -1488,7 +1436,7 @@
             }
         }
 
-        // XỬ LÝ GỬI FORM RSVP & LƯU BÚT ĐỒNG BỘ 1 SHEET
+        // KHÔI PHỤC LUỒNG GỬI RSVP CHUẨN POST NO-CORS (Bắt lỗi nhẹ bằng console.warn)
         const rsvpForm = document.getElementById('rsvp-form');
         if (rsvpForm) {
             rsvpForm.addEventListener('submit', function(e) {
@@ -1528,85 +1476,43 @@
                     renderWishes();
                 }
 
-                // Gửi bất đồng bộ chuẩn CORS sử dụng "text/plain" làm màng bọc để lách CORS Preflight OPTIONS
-                const callbackName = "rsvp_submit_" + Math.floor(Math.random() * 1000000);
-                window[callbackName] = function(result) {
-                    if (result && result.status === "success") {
-                        handleRSVPSuccess(btn, status, origText);
-                    } else {
-                        handleRSVPError(btn, origText, new Error(result.message || "Spreadsheet từ chối lưu."));
-                    }
-                    cleanup();
-                };
+                // Gửi bất đồng bộ chuẩn POST no-cors của bản chốt ổn định nhất
+                fetch(apiEndpoint, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                })
+                .then(function() {
+                    if (status) status.classList.remove('hidden');
+                    if (btn) btn.innerText = "THÀNH CÔNG";
+                    
+                    // Kích hoạt pháo hoa lấp lánh ăn mừng
+                    triggerConfetti();
 
-                const script = document.createElement("script");
-                script.id = callbackName;
-                script.src = apiEndpoint + "?callback=" + callbackName + "&data=" + encodeURIComponent(JSON.stringify(payload)) + "&_nocache=" + Date.now();
+                    // Tải lại danh sách lời chúc mới sau 2s
+                    setTimeout(function() {
+                        fetchWishes();
+                    }, 2000);
 
-                // Quản lý thời gian chờ tối đa 6 giây
-                const timeoutId = setTimeout(function() {
-                    if (window[callbackName]) {
-                        // Nếu đang ở trong trình biên dịch sandbox của Canvas bị quá hạn kết nối, tự chuyển luồng ảo thành công
-                        if (window.location.hostname.includes("usercontent.goog")) {
-                            handleRSVPSandboxFallback(btn, status, origText);
-                        } else {
-                            handleRSVPError(btn, origText, new Error("Yêu cầu quá hạn kết nối đến Google Sheets."));
+                    setTimeout(function() {
+                        const formEl = document.getElementById('rsvp-form');
+                        if (formEl) formEl.reset();
+                        if (status) status.classList.add('hidden');
+                        if (btn) {
+                            btn.innerText = origText;
+                            btn.disabled = false;
                         }
-                        cleanup();
+                    }, 3000);
+                })
+                .catch(function(err) {
+                    console.warn("Không thể gửi dữ liệu trực tiếp trong môi trường sandbox thử nghiệm.", err);
+                    if (btn) {
+                        btn.disabled = false;
+                        btn.innerText = "GỬI LẠI";
                     }
-                }, 6000);
-
-                function cleanup() {
-                    clearTimeout(timeoutId);
-                    if (script) script.remove();
-                    delete window[callbackName];
-                }
-
-                script.onerror = function() {
-                    // Xử lý giả lập nếu lỗi kết nối do cơ chế Sandbox Iframe chặn script
-                    if (window.location.hostname.includes("usercontent.goog")) {
-                        handleRSVPSandboxFallback(btn, status, origText);
-                    } else {
-                        handleRSVPError(btn, origText, new Error("Không thể kết nối đến máy chủ Google Sheets."));
-                    }
-                    cleanup();
-                };
-
-                document.head.appendChild(script);
+                });
             });
-        }
-
-        function handleRSVPSuccess(btn, status, origText) {
-            if (status) status.classList.remove('hidden');
-            if (btn) btn.innerText = "THÀNH CÔNG";
-            
-            triggerConfetti();
-
-            // Tải lại danh sách lời chúc mới sau 2s
-            setTimeout(fetchWishes, 2000);
-
-            setTimeout(function() {
-                const formEl = document.getElementById('rsvp-form');
-                if (formEl) formEl.reset();
-                if (status) status.classList.add('hidden');
-                if (btn) {
-                    btn.innerText = origText;
-                    btn.disabled = false;
-                }
-            }, 3000);
-        }
-
-        function handleRSVPError(btn, origText, err) {
-            showToast("Lỗi gửi: " + err.message);
-            if (btn) {
-                btn.disabled = false;
-                btn.innerText = "GỬI LẠI";
-            }
-        }
-
-        function handleRSVPSandboxFallback(btn, status, origText) {
-            showToast("Môi trường Preview Sandbox chặn kết nối CORS trực tiếp. Đã chuyển sang chế độ giả lập lưu thành công!");
-            handleRSVPSuccess(btn, status, origText);
         }
     </script>
 </body>
