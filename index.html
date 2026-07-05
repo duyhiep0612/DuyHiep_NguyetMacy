@@ -102,12 +102,12 @@
         /* Hiệu ứng cánh hồng rơi nhẹ nhàng lãng mạn */
         .petal {
             position: fixed;
+            top: -50px; /* Đẩy hẳn ra ngoài mép trên bằng pixel tuyệt đối */
+            opacity: 0; /* BẮT BUỘC TÀNG HÌNH khi đang chờ delay */
             pointer-events: none;
             z-index: 999;
-            /* Đẩy z-index lên cao tuyệt đối */
             box-shadow: 0 4px 10px rgba(255, 182, 193, 0.15);
             border-radius: 2px 40px 2px 40px;
-            /* Định dáng cánh hoa hồng mỏng nhẹ */
             animation: fall linear infinite;
         }
 
@@ -1344,11 +1344,28 @@
                     };
                 });
 
-            // SẮP XẾP AN TOÀN TRÊN IOS: Do Timestamp đã được ép chuẩn ISO 8601 từ server, phép so sánh Date này sẽ không bao giờ trả về NaN
+            // ĐẢO NGƯỢC & SẮP XẾP AN TOÀN (MỚI NHẤT LÊN ĐẦU)
+            // 1. Google Sheets luôn thêm dữ liệu mới xuống cuối, nên mặc định đảo ngược mảng để mới nhất lên đầu.
+            localWishes.reverse();
+            
+            // 2. Thuật toán phân tích thời gian thông minh đề phòng lỗi "Invalid Date" trên Safari/iOS
             localWishes.sort(function (a, b) {
-                const dateA = new Date(a.timestamp);
-                const dateB = new Date(b.timestamp);
-                return dateB - dateA;
+                function parseTimeSafe(t) {
+                    if (!t) return 0;
+                    const d = new Date(t);
+                    if (!isNaN(d.getTime())) return d.getTime();
+                    // Fallback cho định dạng dd/MM/yyyy HH:mm:ss của Google Sheets VN
+                    const parts = t.match(/\d+/g);
+                    if (parts && parts.length >= 3 && parts[2].length === 4) {
+                        return new Date(parts[2], parts[1]-1, parts[0], parts[3]||0, parts[4]||0, parts[5]||0).getTime();
+                    }
+                    return 0;
+                }
+                const tA = parseTimeSafe(a.timestamp);
+                const tB = parseTimeSafe(b.timestamp);
+                // Chỉ đổi chỗ nếu có thời gian hợp lệ, nếu không giữ nguyên thứ tự (đã reverse)
+                if (tA > 0 && tB > 0) return tB - tA;
+                return 0;
             });
 
             renderWishes();
