@@ -102,8 +102,10 @@
         /* Hiệu ứng cánh hồng rơi nhẹ nhàng lãng mạn */
         .petal {
             position: fixed;
-            top: -50px; /* Đẩy hẳn ra ngoài mép trên bằng pixel tuyệt đối */
-            opacity: 0; /* BẮT BUỘC TÀNG HÌNH khi đang chờ delay */
+            top: -50px;
+            /* Đẩy hẳn ra ngoài mép trên bằng pixel tuyệt đối */
+            opacity: 0;
+            /* BẮT BUỘC TÀNG HÌNH khi đang chờ delay */
             pointer-events: none;
             z-index: 999;
             box-shadow: 0 4px 10px rgba(255, 182, 193, 0.15);
@@ -161,14 +163,14 @@
 
         /* Banner Hero tối ưu di động */
         .hero {
-            background: linear-gradient(rgba(17, 34, 24, 0.45), rgba(17, 34, 24, 0.45)), url('assets/banner.jpg') center/cover no-repeat;
-            background-attachment: fixed;
+            background: linear-gradient(rgba(17, 34, 24, 0.45), rgba(17, 34, 24, 0.45)), url('webp/banner.webp') center top/cover no-repeat;
+            background-attachment: scroll;
         }
 
         @media (max-width: 1024px) {
             .hero {
                 background-attachment: scroll !important;
-                background-position: center center;
+                background-position: center top !important;
                 min-height: 100vh;
                 min-height: -webkit-fill-available;
             }
@@ -412,23 +414,28 @@
 
         <!-- 2. BANNER CHÍNH (HERO SECTION) -->
         <section class="hero h-screen w-full flex flex-col items-center justify-center text-white relative">
-            <div class="relative z-10 text-center px-4 space-y-4 md:space-y-6" data-aos="zoom-in" data-aos-duration="1500">
-                <p class="font-sans text-xs md:text-sm tracking-[0.4em] uppercase font-extrabold text-wedding-gold drop-shadow-md">
+            <div class="relative z-10 text-center px-4 space-y-4 md:space-y-6" data-aos="zoom-in"
+                data-aos-duration="1500">
+                <p
+                    class="font-sans text-xs md:text-sm tracking-[0.4em] uppercase font-extrabold text-wedding-gold drop-shadow-md">
                     We Are Getting Married
                 </p>
                 <h2 class="font-script text-7xl md:text-8xl lg:text-9xl drop-shadow-xl text-white">
-                    Duy Hiệp <span class="font-serif text-4xl md:text-5xl text-wedding-gold mx-2">&amp;</span> Minh Nguyệt
+                    Duy Hiệp <span class="font-serif text-4xl md:text-5xl text-wedding-gold mx-2">&amp;</span> Minh
+                    Nguyệt
                 </h2>
                 <div class="w-16 md:w-24 h-[1.5px] bg-wedding-gold mx-auto my-6 shadow-sm"></div>
                 <p class="font-serif text-lg md:text-2xl tracking-[0.25em] uppercase font-semibold drop-shadow-md">
                     19 . 09 . 2026
                 </p>
             </div>
-            
+
             <!-- Mũi tên hướng dẫn cuộn xuống -->
             <div class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce z-10">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white/80" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white/80" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                        d="M19 14l-7 7m0 0l-7-7m7 7V3" />
                 </svg>
             </div>
         </section>
@@ -440,7 +447,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center" data-aos="fade-up">
                     <div class="md:col-span-5 flex justify-center">
                         <div class="img-frame max-w-[240px] md:max-w-full">
-                            <img src="assets/groom.jpg" onerror="this.src='https://picsum.photos/400/500?random=1'"
+                            <img src="webp/groom.webp" onerror="this.src='https://picsum.photos/400/500?random=1'"
                                 class="w-full object-cover rounded-sm aspect-[4/5]" alt="Chú rể Duy Hiệp">
                         </div>
                     </div>
@@ -461,7 +468,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center md:flex-row-reverse" data-aos="fade-up">
                     <div class="md:col-span-5 md:order-last flex justify-center">
                         <div class="img-frame max-w-[240px] md:max-w-full">
-                            <img src="assets/bride.jpg" onerror="this.src='https://picsum.photos/400/500?random=2'"
+                            <img src="webp/bride.webp" onerror="this.src='https://picsum.photos/400/500?random=2'"
                                 class="w-full object-cover rounded-sm aspect-[4/5]" alt="Cô dâu Minh Nguyệt">
                         </div>
                     </div>
@@ -497,133 +504,7 @@
             </div>
         </section>
 
-        <!-- 5. LOVE STORY (Khôi phục hình ảnh gốc kết hợp căn lề đối xứng nghệ thuật Zig-zag Editorial) -->
-        <section class="py-16 md:py-24 bg-white border-b border-gray-100">
-            <div class="max-w-4xl mx-auto px-6">
-                <h2 class="font-serif text-3xl md:text-4xl text-center text-wedding-primary mb-16 tracking-[0.25em] uppercase font-bold"
-                    data-aos="zoom-in">Our Love Story</h2>
 
-                <div class="relative max-w-3xl mx-auto pl-10 md:pl-0">
-                    <!-- Trục dọc thanh mảnh làm nền định hướng mốc thời gian -->
-                    <div
-                        class="absolute left-4 md:left-1/2 top-0 bottom-0 w-[1px] bg-gradient-to-b from-wedding-gold/10 via-wedding-gold/45 to-wedding-gold/10 md:-translate-x-1/2 z-0">
-                    </div>
-
-                    <!-- 2019 (Text Left, Image Right) -->
-                    <div class="relative grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8 items-center mb-16">
-                        <!-- Dot node -->
-                        <div
-                            class="absolute left-[-32px] md:left-1/2 md:-translate-x-1/2 w-4 h-4 rounded-full bg-wedding-gold border-4 border-white shadow-sm z-10">
-                        </div>
-                        <!-- Cột Trái: Chữ căn lề phải trên desktop -->
-                        <div class="md:col-span-5 text-left md:text-right md:pr-4" data-aos="fade-right">
-                            <span class="font-sans text-2xl font-bold text-wedding-primary">2019</span>
-                            <h4 class="text-wedding-gold-dark italic text-lg font-bold mt-1">"Lần đầu ta gặp nhỏ..."
-                            </h4>
-                            <p class="text-sm text-gray-600 font-serif leading-relaxed mt-2 md:ml-auto md:max-w-sm">Ánh
-                                mắt ấy đã làm trái tim tôi lỡ nhịp ngay từ phút giây đầu tiên tại quán cà phê quen
-                                thuộc.</p>
-                        </div>
-                        <!-- Cột Giữa: Khoảng đệm cho trục dọc -->
-                        <div class="hidden md:block md:col-span-2"></div>
-                        <!-- Cột Phải: Ảnh cưới lồng khung mỏng dập bóng -->
-                        <div class="md:col-span-5 flex justify-start md:pl-4" data-aos="fade-left">
-                            <div
-                                class="inline-block p-1.5 bg-white border border-gray-100 shadow-md rounded-sm max-w-[250px] transform transition duration-300 hover:-translate-y-1 hover:shadow-lg">
-                                <img src="assets/story1.jpg"
-                                    onerror="this.src='https://picsum.photos/400/300?random=11'"
-                                    class="w-full h-auto object-cover rounded-sm aspect-[4/3]" alt="Gặp gỡ 2019">
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 2021 (Image Left, Text Right) -->
-                    <div
-                        class="relative grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8 items-center mb-16 md:flex-row-reverse">
-                        <!-- Dot node -->
-                        <div
-                            class="absolute left-[-32px] md:left-1/2 md:-translate-x-1/2 w-4 h-4 rounded-full bg-wedding-gold border-4 border-white shadow-sm z-10">
-                        </div>
-                        <!-- Cột Trái: Ảnh lồng khung mỏng dập bóng -->
-                        <div class="md:col-span-5 flex justify-start md:justify-end md:pr-4 order-last md:order-first"
-                            data-aos="fade-right">
-                            <div
-                                class="inline-block p-1.5 bg-white border border-gray-100 shadow-md rounded-sm max-w-[250px] transform transition duration-300 hover:-translate-y-1 hover:shadow-lg">
-                                <img src="assets/story2.jpg"
-                                    onerror="this.src='https://picsum.photos/400/300?random=12'"
-                                    class="w-full h-auto object-cover rounded-sm aspect-[4/3]" alt="Yêu thương 2021">
-                            </div>
-                        </div>
-                        <!-- Cột Giữa: Khoảng đệm cho trục dọc -->
-                        <div class="hidden md:block md:col-span-2"></div>
-                        <!-- Cột Phải: Chữ căn lề trái trên desktop -->
-                        <div class="md:col-span-5 text-left md:pl-4" data-aos="fade-left">
-                            <span class="font-sans text-2xl font-bold text-wedding-primary">2021</span>
-                            <h4 class="text-wedding-gold-dark italic text-lg font-bold mt-1">Lời tỏ tình vụng về</h4>
-                            <p class="text-sm text-gray-600 font-serif leading-relaxed mt-2 md:max-w-sm">Dưới cơn mưa
-                                phùn Hà Nội, chúng mình chính thức gọi nhau là "người yêu". Một hành trình mới đầy hứa
-                                hẹn bắt đầu.</p>
-                        </div>
-                    </div>
-
-                    <!-- 2024 (Text Left, Image Right) -->
-                    <div class="relative grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8 items-center mb-16">
-                        <!-- Dot node -->
-                        <div
-                            class="absolute left-[-32px] md:left-1/2 md:-translate-x-1/2 w-4 h-4 rounded-full bg-wedding-gold border-4 border-white shadow-sm z-10">
-                        </div>
-                        <!-- Cột Trái: Chữ căn lề phải trên desktop -->
-                        <div class="md:col-span-5 text-left md:text-right md:pr-4" data-aos="fade-right">
-                            <span class="font-sans text-2xl font-bold text-wedding-primary">2024</span>
-                            <h4 class="text-wedding-gold-dark italic text-lg font-bold mt-1">Will you marry me?</h4>
-                            <p class="text-sm text-gray-600 font-serif leading-relaxed mt-2 md:ml-auto md:max-w-sm">
-                                Chiếc nhẫn cầu hôn lấp lánh đã tìm thấy chủ nhân thực sự của nó. Một cái gật đầu khẽ
-                                khàng và những giọt nước mắt hạnh phúc dâng tràn.</p>
-                        </div>
-                        <!-- Cột Giữa: Khoảng đệm cho trục dọc -->
-                        <div class="hidden md:block md:col-span-2"></div>
-                        <!-- Cột Phải: Ảnh lồng khung mỏng dập bóng -->
-                        <div class="md:col-span-5 flex justify-start md:pl-4" data-aos="fade-left">
-                            <div
-                                class="inline-block p-1.5 bg-white border border-gray-100 shadow-md rounded-sm max-w-[250px] transform transition duration-300 hover:-translate-y-1 hover:shadow-lg">
-                                <img src="assets/story3.jpg"
-                                    onerror="this.src='https://picsum.photos/400/300?random=13'"
-                                    class="w-full h-auto object-cover rounded-sm aspect-[4/3]" alt="Cầu hôn 2024">
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 2026 (Image Left, Text Right) -->
-                    <div
-                        class="relative grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8 items-center mb-4 md:flex-row-reverse">
-                        <!-- Dot node -->
-                        <div
-                            class="absolute left-[-32px] md:left-1/2 md:-translate-x-1/2 w-4 h-4 rounded-full bg-wedding-gold border-4 border-white shadow-sm z-10">
-                        </div>
-                        <!-- Cột Trái: Ảnh lồng khung mỏng dập bóng -->
-                        <div class="md:col-span-5 flex justify-start md:justify-end md:pr-4 order-last md:order-first"
-                            data-aos="fade-right">
-                            <div
-                                class="inline-block p-1.5 bg-white border border-gray-100 shadow-md rounded-sm max-w-[250px] transform transition duration-300 hover:-translate-y-1 hover:shadow-lg">
-                                <img src="assets/story4.jpg"
-                                    onerror="this.src='https://picsum.photos/400/300?random=14'"
-                                    class="w-full h-auto object-cover rounded-sm aspect-[4/3]" alt="Chung đôi 2026">
-                            </div>
-                        </div>
-                        <!-- Cột Giữa: Khoảng đệm cho trục dọc -->
-                        <div class="hidden md:block md:col-span-2"></div>
-                        <!-- Cột Phải: Chữ căn lề trái trên desktop -->
-                        <div class="md:col-span-5 text-left md:pl-4" data-aos="fade-left">
-                            <span class="font-sans text-2xl font-bold text-wedding-primary">2026</span>
-                            <h4 class="text-wedding-gold-dark italic text-lg font-bold mt-1">Mãi mãi một tình yêu</h4>
-                            <p class="text-sm text-gray-600 font-serif leading-relaxed mt-2 md:max-w-sm">Cảm ơn bạn đời
-                                đã xuất hiện và bao dung để hoàn thiện mảnh ghép thiêng liêng nhất của cuộc đời mình.
-                                Chào mừng ngày lễ thành hôn chung đôi!</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
 
         <!-- ALBUM 3D SLIDER -->
         <section class="py-16 bg-[#faf9f6] border-t border-b border-gray-100" data-aos="fade-up">
@@ -633,27 +514,27 @@
 
             <div class="swiper mySwiper max-w-3xl mx-auto px-6 relative">
                 <div class="swiper-wrapper">
-                    <div class="swiper-slide max-w-[320px] md:max-w-[400px]"><img src="assets/album1.jpg"
+                    <div class="swiper-slide max-w-[320px] md:max-w-[400px]"><img src="webp/album1.webp"
                             onerror="this.src='https://picsum.photos/400/500?random=21'"
                             class="rounded-lg shadow-md cursor-zoom-in w-full h-[400px] object-cover"
                             onclick="showFull(this.src)"></div>
-                    <div class="swiper-slide max-w-[320px] md:max-w-[400px]"><img src="assets/album2.jpg"
+                    <div class="swiper-slide max-w-[320px] md:max-w-[400px]"><img src="webp/album2.webp"
                             onerror="this.src='https://picsum.photos/400/500?random=22'"
                             class="rounded-lg shadow-md cursor-zoom-in w-full h-[400px] object-cover"
                             onclick="showFull(this.src)"></div>
-                    <div class="swiper-slide max-w-[320px] md:max-w-[400px]"><img src="assets/album3.jpg"
+                    <div class="swiper-slide max-w-[320px] md:max-w-[400px]"><img src="webp/album3.webp"
                             onerror="this.src='https://picsum.photos/400/500?random=23'"
                             class="rounded-lg shadow-md cursor-zoom-in w-full h-[400px] object-cover"
                             onclick="showFull(this.src)"></div>
-                    <div class="swiper-slide max-w-[320px] md:max-w-[400px]"><img src="assets/album4.jpg"
+                    <div class="swiper-slide max-w-[320px] md:max-w-[400px]"><img src="webp/album4.webp"
                             onerror="this.src='https://picsum.photos/400/500?random=24'"
                             class="rounded-lg shadow-md cursor-zoom-in w-full h-[400px] object-cover"
                             onclick="showFull(this.src)"></div>
-                    <div class="swiper-slide max-w-[320px] md:max-w-[400px]"><img src="assets/album5.jpg"
+                    <div class="swiper-slide max-w-[320px] md:max-w-[400px]"><img src="webp/album5.webp"
                             onerror="this.src='https://picsum.photos/400/500?random=25'"
                             class="rounded-lg shadow-md cursor-zoom-in w-full h-[400px] object-cover"
                             onclick="showFull(this.src)"></div>
-                    <div class="swiper-slide max-w-[320px] md:max-w-[400px]"><img src="assets/album6.jpg"
+                    <div class="swiper-slide max-w-[320px] md:max-w-[400px]"><img src="webp/album6.webp"
                             onerror="this.src='https://picsum.photos/400/500?random=26'"
                             class="rounded-lg shadow-md cursor-zoom-in w-full h-[400px] object-cover"
                             onclick="showFull(this.src)"></div>
@@ -664,32 +545,32 @@
 
                 <p
                     class="text-center text-xs font-sans text-gray-500 mt-6 italic tracking-wider flex items-center justify-center gap-1.5 font-semibold">
-                    <span>👈</span> Vuốt sang hai bên để xem thêm ảnh <span>👉</span>
+                    <span>👆</span> Vuốt sang hai bên để xem thêm ảnh <span>👇</span>
                 </p>
             </div>
 
             <div class="album-grid max-w-3xl mx-auto px-6 mt-12">
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                     <div class="overflow-hidden rounded-md shadow-sm border border-gray-100" data-aos="fade-up">
-                        <img src="assets/story1.jpg" onerror="this.src='https://picsum.photos/400/500?random=31'"
+                        <img src="webp/wait1.webp" onerror="this.src='https://picsum.photos/400/500?random=31'"
                             class="w-full h-48 object-cover cursor-zoom-in hover:scale-105 transition duration-300"
                             onclick="showFull(this.src)" alt="Ảnh cưới 1">
                     </div>
                     <div class="overflow-hidden rounded-md shadow-sm border border-gray-100" data-aos="fade-up"
                         data-aos-delay="100">
-                        <img src="assets/story2.jpg" onerror="this.src='https://picsum.photos/400/500?random=32'"
+                        <img src="webp/wait2.webp" onerror="this.src='https://picsum.photos/400/500?random=32'"
                             class="w-full h-48 object-cover cursor-zoom-in hover:scale-105 transition duration-300"
                             onclick="showFull(this.src)" alt="Ảnh cưới 2">
                     </div>
                     <div class="overflow-hidden rounded-md shadow-sm border border-gray-100" data-aos="fade-up"
                         data-aos-delay="200">
-                        <img src="assets/album7.jpg" onerror="this.src='https://picsum.photos/400/500?random=33'"
+                        <img src="webp/album7.webp" onerror="this.src='https://picsum.photos/400/500?random=33'"
                             class="w-full h-48 object-cover cursor-zoom-in hover:scale-105 transition duration-300"
                             onclick="showFull(this.src)" alt="Ảnh cưới 3">
                     </div>
                     <div class="overflow-hidden rounded-md shadow-sm border border-gray-100" data-aos="fade-up"
                         data-aos-delay="300">
-                        <img src="assets/album8.jpg" onerror="this.src='https://picsum.photos/400/500?random=34'"
+                        <img src="webp/album8.webp" onerror="this.src='https://picsum.photos/400/500?random=34'"
                             class="w-full h-48 object-cover cursor-zoom-in hover:scale-105 transition duration-300"
                             onclick="showFull(this.src)" alt="Ảnh cưới 4">
                     </div>
@@ -971,11 +852,8 @@
                         </select>
 
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <select id="location"
-                                class="w-full p-4 border border-gray-300 rounded-sm bg-white focus:outline-none focus:border-wedding-gold font-semibold text-wedding-text transition cursor-pointer">
-                                <option value="Nhà Trai">Nhà Trai (19/09)</option>
-                                <option value="Đón Dâu">Đón Dâu (12/09)</option>
-                            </select>
+                            <input type="text" id="location" value="Tiệc Cưới (19/09/2026)" readonly
+                                class="w-full p-4 border border-gray-300 rounded-sm bg-white font-semibold text-wedding-text cursor-default focus:outline-none">
 
                             <select id="guest-count"
                                 class="w-full p-4 border border-gray-300 rounded-sm bg-white focus:outline-none focus:border-wedding-gold font-semibold text-wedding-text transition cursor-pointer">
@@ -1347,7 +1225,7 @@
             // ĐẢO NGƯỢC & SẮP XẾP AN TOÀN (MỚI NHẤT LÊN ĐẦU)
             // 1. Google Sheets luôn thêm dữ liệu mới xuống cuối, nên mặc định đảo ngược mảng để mới nhất lên đầu.
             localWishes.reverse();
-            
+
             // 2. Thuật toán phân tích thời gian thông minh đề phòng lỗi "Invalid Date" trên Safari/iOS
             localWishes.sort(function (a, b) {
                 function parseTimeSafe(t) {
@@ -1357,7 +1235,7 @@
                     // Fallback cho định dạng dd/MM/yyyy HH:mm:ss của Google Sheets VN
                     const parts = t.match(/\d+/g);
                     if (parts && parts.length >= 3 && parts[2].length === 4) {
-                        return new Date(parts[2], parts[1]-1, parts[0], parts[3]||0, parts[4]||0, parts[5]||0).getTime();
+                        return new Date(parts[2], parts[1] - 1, parts[0], parts[3] || 0, parts[4] || 0, parts[5] || 0).getTime();
                     }
                     return 0;
                 }
